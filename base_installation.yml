@@ -96,7 +96,6 @@
           - direnv
           - docker.io
           - golang-go
-          - hddtemp
           - htop
           - iotop
           - jq
@@ -181,6 +180,7 @@
       become: true
       with_items:
         - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
+        - http://archive.ubuntu.com/ubuntu/pool/universe/h/hddtemp/hddtemp_0.3-beta15-54_amd64.deb
         - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
         - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
         - https://zoom.us/client/latest/zoom_amd64.deb
