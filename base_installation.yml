@@ -6,7 +6,6 @@
     username: "{{ lookup ('env', 'USER') }}"
     home_dir: "{{ lookup ('env', 'HOME') }}"
     gopass_version: 1.13.0
-    hddtemp_version: 0.3-beta15-54
     kubectl_version: 1.21/stable
     minikube_version: 1.22.0-0
     vagrant_version: 2.2.10
@@ -183,7 +182,6 @@
       become: true
       with_items:
         - https://github.com/gopasspw/gopass/releases/download/v{{ gopass_version }}/gopass_{{ gopass_version }}_linux_amd64.deb
-        - http://archive.ubuntu.com/ubuntu/pool/universe/h/hddtemp/hddtemp_{{ hddtemp_version }}_amd64.deb
         - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
         - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
         - https://zoom.us/client/latest/zoom_amd64.deb
