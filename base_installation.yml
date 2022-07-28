@@ -89,38 +89,38 @@
       become: true
       vars:
         packages:
-        - ansible-lint
-        - apt-transport-https
-        - build-essential
-        - curl
-        - direnv
-        - docker.io
-        - golang-go
-        - hddtemp
-        - htop
-        - iotop
-        - jq
-        - keepassxc
-        - liblzma-dev
-        - libcurl4-openssl-dev
-        - linux-headers-generic
-        - lm-sensors
-        - net-tools
-        - openjdk-11-jdk
-        - openssh-server
-        - openvpn
-        - patch
-        - powertop
-        - python3-pip
-        - ruby-dev
-        - ruby-libxml
-        - smartmontools
-        - software-properties-common
-        - tree
-        - vim
-        - wget
-        - xpaint
-        - zlib1g-dev
+          - ansible-lint
+          - apt-transport-https
+          - build-essential
+          - curl
+          - direnv
+          - docker.io
+          - golang-go
+          - hddtemp
+          - htop
+          - iotop
+          - jq
+          - keepassxc
+          - liblzma-dev
+          - libcurl4-openssl-dev
+          - linux-headers-generic
+          - lm-sensors
+          - net-tools
+          - openjdk-11-jdk
+          - openssh-server
+          - openvpn
+          - patch
+          - powertop
+          - python3-pip
+          - ruby-dev
+          - ruby-libxml
+          - smartmontools
+          - software-properties-common
+          - tree
+          - vim
+          - wget
+          - xpaint
+          - zlib1g-dev
 
     - name: Install pip packages
       pip:
@@ -302,23 +302,23 @@
       command: code --install-extension "{{ item }}"
       when: item not in vs_code_extensions.stdout
       with_items:
-      - DavidAnson.vscode-markdownlint
-      - dbaeumer.vscode-eslint
-      - eamodio.gitlens
-      - hashicorp.terraform
-      - HookyQR.beautify
-      - janjoerke.jenkins-pipeline-linter-connector
-      - jmMeessen.jenkins-declarative-support
-      - magicstack.MagicPython
-      - mhutchie.git-graph
-      - ms-azuretools.vscode-docker
-      - ms-python.python
-      - MS-vsliveshare.vsliveshare-pack
-      - redhat.vscode-yaml
-      - teledemic.branch-warnings
-      - tht13.python
-      - vivaxy.vscode-conventional-commits
-      - vscodevim.vim
+        - DavidAnson.vscode-markdownlint
+        - dbaeumer.vscode-eslint
+        - eamodio.gitlens
+        - hashicorp.terraform
+        - HookyQR.beautify
+        - janjoerke.jenkins-pipeline-linter-connector
+        - jmMeessen.jenkins-declarative-support
+        - magicstack.MagicPython
+        - mhutchie.git-graph
+        - ms-azuretools.vscode-docker
+        - ms-python.python
+        - MS-vsliveshare.vsliveshare-pack
+        - redhat.vscode-yaml
+        - teledemic.branch-warnings
+        - tht13.python
+        - vivaxy.vscode-conventional-commits
+        - vscodevim.vim
 
     - name: Check if vscode settings.json exists
       stat:
@@ -365,7 +365,7 @@
       become: true
       notify: Restart docker
       with_items:
-      - docker
+        - docker
 
     - name: Make docker the default minikube driver
       command: minikube config set driver docker
