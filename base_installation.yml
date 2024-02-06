@@ -385,6 +385,7 @@
         line: 'PasswordAuthentication yes'
         path: /etc/ssh/sshd_config
         validate: sshd -t -f %s
+        mode: "0644"
       notify: Enable and restart sshd
       when: setup_open_ssh_server | bool
 
