@@ -359,7 +359,7 @@
     - name: Ensure group "docker" exists with correct gid
       ansible.builtin.group:
         name: docker
-        state: file
+        state: present
         gid: 1750
       become: true
 
