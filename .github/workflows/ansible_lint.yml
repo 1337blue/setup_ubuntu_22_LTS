@@ -23,6 +23,6 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: ansible-lint
-      uses: ansible/ansible-lint@main
+      uses: ansible/ansible-lint@v6.21.1
       with:
         targets: "**.yml"
