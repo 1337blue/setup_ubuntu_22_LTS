@@ -339,7 +339,7 @@
 
     - name: Increase watch limit for VSCode
       become: true
-      ansible.builtin.file:
+      ansible.builtin.lineinfile:
         path: /etc/sysctl.conf
         state: file
         line: fs.inotify.max_user_watches=524288
@@ -347,7 +347,7 @@
 
     - name: Add direnv hook bash to bashrc
       become: true
-      ansible.builtin.file:
+      ansible.builtin.lineinfile:
         path: /etc/bash.bashrc
         state: file
         line: "{{ item }}"
@@ -379,7 +379,7 @@
 
     - name: Allow SSH password authentication
       become: true
-      ansible.builtin.file:
+      ansible.builtin.lineinfile:
         state: file
         regexp: '.*PasswordAuthentication.*'
         line: 'PasswordAuthentication yes'
