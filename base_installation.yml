@@ -140,7 +140,7 @@
         - package.public_keys
 
     - name: Add apt repos
-      apt_repository:
+      ansible.builtin.apt_repository:
         repo: "{{item.package.repository | dict2items | json_query('[].value') | first}}"
         filename: "{{item.package.repository | dict2items | json_query('[].key') | first}}"
       become: true
