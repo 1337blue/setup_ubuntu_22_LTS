@@ -52,7 +52,7 @@
         mode: '0755'
 
     - name: Add git email
-      git_config:
+      community.general.git_config:
         name: user.email
         scope: system
         value: "{{ git.email }}"
@@ -61,7 +61,7 @@
         - '"@" in git.email'
 
     - name: Add git user name
-      git_config:
+      community.general.git_config:
         name: user.name
         scope: system
         value: "{{ git.username }}"
@@ -70,7 +70,7 @@
         - 'git.username | length > 1'
 
     - name: Set vim as default editor for git
-      git_config:
+      community.general.git_config:
         name: user.editor
         scope: system
         value: vim
