@@ -1,4 +1,4 @@
-- name: setup_working_environment
+- name: Setup working environment
   hosts: localhost
   collections:
     - community.general
