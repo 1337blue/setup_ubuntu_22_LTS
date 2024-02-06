@@ -397,14 +397,14 @@
 
   handlers:
     - name: Enable and restart sshd
-      service:
+      ansible.builtin.service:
         name: sshd
         enabled: true
         state: restarted
       become: true
 
     - name: Restart docker
-      service:
+      ansible.builtin.service:
         name: docker
         enabled: true
         state: restarted
