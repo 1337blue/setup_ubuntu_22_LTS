@@ -341,7 +341,7 @@
       become: true
       ansible.builtin.file:
         path: /etc/sysctl.conf
-        state: present
+        state: file
         line: fs.inotify.max_user_watches=524288
         mode: "0644"
 
@@ -349,7 +349,7 @@
       become: true
       ansible.builtin.file:
         path: /etc/bash.bashrc
-        state: present
+        state: file
         line: "{{ item }}"
       loop:
         - eval "$(direnv hook bash)"
@@ -359,7 +359,7 @@
     - name: Ensure group "docker" exists with correct gid
       ansible.builtin.group:
         name: docker
-        state: present
+        state: file
         gid: 1750
       become: true
 
@@ -380,7 +380,7 @@
     - name: Allow SSH password authentication
       become: true
       ansible.builtin.file:
-        state: present
+        state: file
         regexp: '.*PasswordAuthentication.*'
         line: 'PasswordAuthentication yes'
         path: /etc/ssh/sshd_config
