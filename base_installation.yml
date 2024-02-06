@@ -124,7 +124,7 @@
         - zlib1g-dev
 
     - name: Install pip packages
-      pip:
+      ansible.builtin.pip:
         name:
           - awscli
           - docker-compose
