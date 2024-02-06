@@ -132,7 +132,7 @@
           - yq
 
     - name: Import GPG keys
-      apt_key:
+      ansible.builtin.apt_key:
         url: "{{item.1}}"
       become: true
       with_subelements:
