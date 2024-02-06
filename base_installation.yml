@@ -194,13 +194,13 @@
           releases/latest/minikube_latest_amd64.deb`].changed')}}"
 
     - name: Is terraform installed?
-      command: terraform -v
+      ansible.builtin.command: terraform -v
       register: is_terraform_installed
       ignore_errors: true
       changed_when: not is_terraform_installed.rc == 0
 
     - name: Is tfenv installed?
-      command: tfenv -v
+      ansible.builtin.command: tfenv -v
       register: is_tfenv_installed
       ignore_errors: true
       changed_when: not is_tfenv_installed.rc == 0
@@ -227,7 +227,7 @@
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Install tfenv
-      command: "mv {{tmp_dir}}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
+      ansible.builtin.command: "mv {{tmp_dir}}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Find tfenv binaries
@@ -249,15 +249,15 @@
         - "{{tf_env_bins.files}}"
 
     - name: Install terraform
-      command: tfenv install {{terraform.version}}
+      ansible.builtin.command: tfenv install {{terraform.version}}
       when: (not is_terraform_installed.rc == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Setup terraform
-      command: tfenv use {{terraform.version}}
+      ansible.builtin.command: tfenv use {{terraform.version}}
       when: (not is_terraform_installed.rc == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Is tflint installed?
-      command: tflint -v
+      ansible.builtin.command: tflint -v
       register: is_tflint_installed
       ignore_errors: true
       changed_when: not is_tflint_installed.rc == 0
@@ -279,7 +279,7 @@
       when: (not is_tflint_installed.rc == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Is terraform-docs installed?
-      command: terraform-docs -v
+      ansible.builtin.command: terraform-docs -v
       register: is_terraform_docs_installed
       ignore_errors: true
       changed_when: not is_terraform_docs_installed.rc == 0
@@ -295,12 +295,12 @@
       when: (not is_terraform_docs_installed.rc == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: fetch VS Code extensions
-      command: code --list-extensions
+      ansible.builtin.command: code --list-extensions
       register: vs_code_extensions
       changed_when: false
 
     - name: Install VS Code extensions
-      command: code --install-extension "{{item}}"
+      ansible.builtin.command: code --install-extension "{{item}}"
       when: item not in vs_code_extensions.stdout
       with_items:
       - DavidAnson.vscode-markdownlint
@@ -369,7 +369,7 @@
       - docker
 
     - name: Make docker the default minikube driver
-      command: minikube config set driver docker
+      ansible.builtin.command: minikube config set driver docker
       when: minikube_changes | bool
 
     - name: Allow SSH password authentication
