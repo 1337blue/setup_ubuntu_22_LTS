@@ -233,7 +233,7 @@
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Find tfenv binaries
-      find:
+      ansible.builtin.find:
         paths: "{{ terraform.env.folder }}/bin"
       register: tf_env_bins
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
