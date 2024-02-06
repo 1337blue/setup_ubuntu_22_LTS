@@ -96,9 +96,7 @@
           - curl
           - direnv
           - docker.io
-          - git-crypt
           - golang-go
-          - hddtemp
           - htop
           - iotop
           - jq
@@ -118,7 +116,6 @@
           - ruby-libxml
           - smartmontools
           - software-properties-common
-          - timewarrior
           - tree
           - vim
           - wget
