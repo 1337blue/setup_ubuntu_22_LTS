@@ -3,16 +3,16 @@
   vars:
     setup_open_ssh_server: false
     tmp_dir: /tmp/ansible
-    username: "{{ lookup ('env', 'USER') }}"
-    home_dir: "{{ lookup ('env', 'HOME') }}"
+    username: "{{lookup ('env', 'USER')}}"
+    home_dir: "{{lookup ('env', 'HOME')}}"
     minikube_version: 1.22.0-0
     vagrant_version: 2.2.10
-    vscode_settings: "{{ home_dir }}/.config/Code/User/settings.json"
+    vscode_settings: "{{home_dir}}/.config/Code/User/settings.json"
     terraform:
       version: 1.7.2
       env:
         version: 3.0.0
-        folder: "{{ home_dir }}/.tfenv"
+        folder: "{{home_dir}}/.tfenv"
       github: https://github.com/terraform
       docs:
         version: 0.17.0
@@ -44,7 +44,7 @@
   tasks:
     - name: Create tmp dir
       file:
-        path: "{{ tmp_dir }}"
+        path: "{{tmp_dir}}"
         state: directory
         mode: '0755'
 
@@ -52,7 +52,7 @@
       community.general.git_config:
         name: user.email
         scope: system
-        value: "{{ git.email }}"
+        value: "{{git.email}}"
       become: true
       when:
         - '"@" in git.email'
@@ -61,7 +61,7 @@
       community.general.git_config:
         name: user.name
         scope: system
-        value: "{{ git.username }}"
+        value: "{{git.username}}"
       become: true
       when:
         - 'git.username | length > 1'
@@ -84,7 +84,7 @@
 
     - name: Install Packages
       apt:
-        name: "{{ packages }}"
+        name: "{{packages}}"
       become: true
       vars:
         packages:
@@ -133,30 +133,30 @@
 
     - name: Import GPG keys
       apt_key:
-        url: "{{ item.1 }}"
+        url: "{{item.1}}"
       become: true
       with_subelements:
-        - "{{ repos }}"
+        - "{{repos}}"
         - package.public_keys
 
     - name: Add apt repos
       apt_repository:
-        repo: "{{ item.package.repository | dict2items | json_query('[].value') | first }}"
-        filename: "{{ item.package.repository | dict2items | json_query('[].key') | first }}"
+        repo: "{{item.package.repository | dict2items | json_query('[].value') | first}}"
+        filename: "{{item.package.repository | dict2items | json_query('[].key') | first}}"
       become: true
       with_items:
-        "{{ repos }}"
+        "{{repos}}"
 
     - name: Install non standard packages
       apt:
-        name: "{{ item.package.name }}"
+        name: "{{item.package.name}}"
       become: true
       with_items:
-        "{{ repos }}"
+        "{{repos}}"
 
     - name: Install Snap apps
       snap:
-        name: "{{ item }}"
+        name: "{{item}}"
         classic: true
         channel: 1.21/stable
       become: true
@@ -166,7 +166,7 @@
     # vagrant depends on virtualbox
     - name: Install Snap apps
       snap:
-        name: "{{ item }}"
+        name: "{{item}}"
         classic: true
       become: true
       with_items:
@@ -178,20 +178,20 @@
     # TODO make sure to only install those if required -> avoid download of packages
     - name: Install minikube, vagrant and zoom
       apt:
-        deb: "{{ item }}"
+        deb: "{{item}}"
       become: true
       with_items:
         - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
-        - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
-        - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
+        - https://storage.googleapis.com/minikube/releases/latest/minikube_{{minikube_version}}_amd64.deb
+        - https://releases.hashicorp.com/vagrant/{{vagrant_version}}/vagrant_{{ vagrant_version }}_x86_64.deb
         - https://zoom.us/client/latest/zoom_amd64.deb
       register: deb_packages
 
     - name: Set fact for minikube handler
       set_fact:
-        minikube_changes: "{{ deb_packages.results | json_query(\
+        minikube_changes: "{{deb_packages.results | json_query(\
           '[?item == `https://storage.googleapis.com/minikube/\
-          releases/latest/minikube_latest_amd64.deb`].changed') }}"
+          releases/latest/minikube_latest_amd64.deb`].changed')}}"
 
     - name: Is terraform installed?
       command: terraform -v
@@ -207,53 +207,53 @@
 
     - name: Download tfenv
       get_url:
-        url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
-        dest: "{{ tmp_dir }}"
+        url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{terraform.env.version}}.zip
+        dest: "{{tmp_dir}}"
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Cleanup tfenv dir
       file:
-        path: "{{ terraform.env.folder }}"
+        path: "{{terraform.env.folder}}"
         state: absent
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Unzip tfenv
       unarchive:
-        src: "{{ tmp_dir }}/tfenv-{{ terraform.env.version }}.zip"
-        dest: "{{ tmp_dir }}"
-        owner: "{{ username }}"
-        group: "{{ username }}"
+        src: "{{tmp_dir}}/tfenv-{{ terraform.env.version }}.zip"
+        dest: "{{tmp_dir}}"
+        owner: "{{username}}"
+        group: "{{username}}"
       become: true
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Install tfenv
-      command: "mv {{ tmp_dir }}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
+      command: "mv {{tmp_dir}}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Find tfenv binaries
       find:
-        paths: "{{ terraform.env.folder }}/bin"
+        paths: "{{terraform.env.folder}}/bin"
       register: tf_env_bins
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Link tfenv binaries
       file:
-        src: "{{ item.path }}"
-        dest: "/usr/local/bin/{{ item.path | basename }}"
+        src: "{{item.path}}"
+        dest: "/usr/local/bin/{{item.path | basename}}"
         state: link
         owner: root
         group: root
       become: true
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
       with_items:
-        - "{{ tf_env_bins.files }}"
+        - "{{tf_env_bins.files}}"
 
     - name: Install terraform
-      command: tfenv install {{ terraform.version }}
+      command: tfenv install {{terraform.version}}
       when: (not is_terraform_installed.rc == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Setup terraform
-      command: tfenv use {{ terraform.version }}
+      command: tfenv use {{terraform.version}}
       when: (not is_terraform_installed.rc == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Is tflint installed?
@@ -264,13 +264,13 @@
 
     - name: Download tflint binary
       get_url:
-        url: "{{ terraform.github }}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
-        dest: "{{ tmp_dir }}"
+        url: "{{terraform.github}}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
+        dest: "{{tmp_dir}}"
       when: (not is_tflint_installed.rc == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Unzip tflint
       unarchive:
-        src: "{{ tmp_dir }}/tflint_linux_amd64.zip"
+        src: "{{tmp_dir}}/tflint_linux_amd64.zip"
         dest: /usr/bin
         mode: '0755'
         owner: root
@@ -286,9 +286,9 @@
 
     - name: Download terraform-docs binary
       get_url:
-        url: "{{ terraform.github }}-docs/terraform-docs/\
-          releases/download/v{{ terraform.docs.version }}/\
-          terraform-docs-v{{ terraform.docs.version }}-linux-amd64"
+        url: "{{terraform.github}}-docs/terraform-docs/\
+          releases/download/v{{terraform.docs.version}}/\
+          terraform-docs-v{{terraform.docs.version}}-linux-amd64"
         dest: /usr/bin/terraform-docs
         mode: '0755'
       become: true
@@ -300,7 +300,7 @@
       changed_when: false
 
     - name: Install VS Code extensions
-      command: code --install-extension "{{ item }}"
+      command: code --install-extension "{{item}}"
       when: item not in vs_code_extensions.stdout
       with_items:
       - DavidAnson.vscode-markdownlint
@@ -323,13 +323,13 @@
 
     - name: Check if vscode settings.json exists
       stat:
-        path: "{{ vscode_settings }}"
+        path: "{{vscode_settings}}"
       register: st
 
     - name: Copy vscode settings.json
       copy:
         src: ./conf/settings.json
-        dest: "{{ vscode_settings }}"
+        dest: "{{vscode_settings}}"
         mode: '0644'
       when: not st.stat.exists
 
@@ -345,7 +345,7 @@
       lineinfile:
         path: /etc/bash.bashrc
         state: present
-        line: "{{ item }}"
+        line: "{{item}}"
       loop:
         - eval "$(direnv hook bash)"
         - export PATH="$HOME/.local/bin:$PATH"
@@ -360,8 +360,8 @@
 
     - name: Append the user to required groups
       ansible.builtin.user:
-        name: "{{ username }}"
-        groups: "{{ item }}"
+        name: "{{username}}"
+        groups: "{{item}}"
         append: true
       become: true
       notify: Restart docker
@@ -391,7 +391,7 @@
 
     - name: Cleanup tmp dir
       file:
-        path: "{{ tmp_dir }}"
+        path: "{{tmp_dir}}"
         state: absent
       become: true
 
