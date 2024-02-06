@@ -56,7 +56,7 @@
         name: user.email
         scope: system
         value: "{{ git.email }}"
-      become: yes
+      become: true
       when:
         - '"@" in git.email'
 
@@ -65,7 +65,7 @@
         name: user.name
         scope: system
         value: "{{ git.username }}"
-      become: yes
+      become: true
       when:
         - 'git.username | length > 1'
 
@@ -74,13 +74,13 @@
         name: user.editor
         scope: system
         value: vim
-      become: yes
+      become: true
 
     - name: Upgrade Packages
       apt:
-        update_cache: yes
+        update_cache: true
         upgrade: full
-      become: yes
+      become: true
       register: apt_action
       retries: 100
       until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
@@ -88,7 +88,7 @@
     - name: Install Packages
       apt:
         name: "{{ packages }}"
-      become: yes
+      become: true
       vars:
         packages:
         - ansible-lint
@@ -137,7 +137,7 @@
     - name: Import GPG keys
       apt_key:
         url: "{{ item.1 }}"
-      become: yes
+      become: true
       with_subelements:
         - "{{ repos }}"
         - package.public_keys
@@ -146,23 +146,23 @@
       apt_repository:
         repo: "{{ item.package.repository | dict2items | json_query('[].value') | first }}"
         filename: "{{ item.package.repository | dict2items | json_query('[].key') | first }}"
-      become: yes
+      become: true
       with_items:
         "{{ repos }}"
 
     - name: Install non standard packages
       apt:
         name: "{{ item.package.name }}"
-      become: yes
+      become: true
       with_items:
         "{{ repos }}"
 
     - name: Install Snap apps
       snap:
         name: "{{ item }}"
-        classic: yes
+        classic: true
         channel: 1.21/stable
-      become: yes
+      become: true
       with_items:
         - kubectl
 
@@ -170,8 +170,8 @@
     - name: Install Snap apps
       snap:
         name: "{{ item }}"
-        classic: yes
-      become: yes
+        classic: true
+      become: true
       with_items:
         - notepad-plus-plus
         - slack
@@ -182,7 +182,7 @@
     - name: Install minikube, vagrant and zoom
       apt:
         deb: "{{ item }}"
-      become: yes
+      become: true
       with_items:
         - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
         - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
@@ -199,13 +199,13 @@
     - name: Is terraform installed?
       command: terraform -v
       register: is_terraform_installed
-      ignore_errors: yes
+      ignore_errors: true
       changed_when: not is_terraform_installed.rc == 0
 
     - name: Is tfenv installed?
       command: tfenv -v
       register: is_tfenv_installed
-      ignore_errors: yes
+      ignore_errors: true
       changed_when: not is_tfenv_installed.rc == 0
 
     - name: Download tfenv
@@ -226,7 +226,7 @@
         dest: "{{ tmp_dir }}"
         owner: "{{ username }}"
         group: "{{ username }}"
-      become: yes
+      become: true
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Install tfenv
@@ -246,7 +246,7 @@
         state: link
         owner: root
         group: root
-      become: yes
+      become: true
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
       with_items:
         - "{{ tf_env_bins.files }}"
@@ -262,7 +262,7 @@
     - name: Is tflint installed?
       command: tflint -v
       register: is_tflint_installed
-      ignore_errors: yes
+      ignore_errors: true
       changed_when: not is_tflint_installed.rc == 0
 
     - name: Download tflint binary
@@ -278,13 +278,13 @@
         mode: '0755'
         owner: root
         group: root
-      become: yes
+      become: true
       when: (not is_tflint_installed.rc == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Is terraform-docs installed?
       command: terraform-docs -v
       register: is_terraform_docs_installed
-      ignore_errors: yes
+      ignore_errors: true
       changed_when: not is_terraform_docs_installed.rc == 0
 
     - name: Download terraform-docs binary
@@ -294,7 +294,7 @@
           terraform-docs-v{{ terraform.docs.version }}-linux-amd64"
         dest: /usr/bin/terraform-docs
         mode: '0755'
-      become: yes
+      become: true
       when: (not is_terraform_docs_installed.rc == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: fetch VS Code extensions
@@ -337,14 +337,14 @@
       when: not st.stat.exists
 
     - name: Increase watch limit for VSCode
-      become: yes
+      become: true
       lineinfile:
         path: /etc/sysctl.conf
         state: present
         line: fs.inotify.max_user_watches=524288
 
     - name: Add direnv hook bash to bashrc
-      become: yes
+      become: true
       lineinfile:
         path: /etc/bash.bashrc
         state: present
@@ -359,14 +359,14 @@
         name: docker
         state: present
         gid: 1750
-      become: yes
+      become: true
 
     - name: Append the user to required groups
       ansible.builtin.user:
         name: "{{ username }}"
         groups: "{{ item }}"
-        append: yes
-      become: yes
+        append: true
+      become: true
       notify: Restart docker
       with_items:
       - docker
@@ -376,7 +376,7 @@
       when: minikube_changes | bool
 
     - name: Allow SSH password authentication
-      become: yes
+      become: true
       lineinfile:
         state: present
         regexp: '.*PasswordAuthentication.*'
@@ -388,27 +388,27 @@
 
     - name: Cleanup apt
       apt:
-        autoremove: yes
-        autoclean: yes
-      become: yes
+        autoremove: true
+        autoclean: true
+      become: true
 
     - name: Cleanup tmp dir
       file:
         path: "{{ tmp_dir }}"
         state: absent
-      become: yes
+      become: true
 
   handlers:
     - name: Enable and restart sshd
       service:
         name: sshd
-        enabled: yes
+        enabled: true
         state: restarted
-      become: yes
+      become: true
 
     - name: Restart docker
       service:
         name: docker
-        enabled: yes
+        enabled: true
         state: restarted
-      become: yes
+      become: true
