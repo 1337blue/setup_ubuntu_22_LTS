@@ -9,15 +9,15 @@
     vagrant_version: 2.2.10
     vscode_settings: "{{ home_dir }}/.config/Code/User/settings.json"
     terraform:
-      version: 0.14.11
+      version: 1.7.2
       env:
-        version: 2.2.2
+        version: 3.0.0
         folder: "{{ home_dir }}/.tfenv"
       github: https://github.com/terraform
       docs:
-        version: 0.12.1
+        version: 0.17.0
       lint:
-        version: 0.28.1
+        version: 0.50.3
     git:
       email: x
       username: x
