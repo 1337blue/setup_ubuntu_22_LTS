@@ -329,7 +329,7 @@
       register: st
 
     - name: Copy vscode settings.json
-      copy:
+      ansible.builtin.copy:
         src: ./conf/settings.json
         dest: "{{ vscode_settings }}"
         mode: '0644'
