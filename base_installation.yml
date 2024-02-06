@@ -206,7 +206,7 @@
       changed_when: not is_tfenv_installed.rc == 0
 
     - name: Download tfenv
-      get_url:
+      ansible.builtin.get_url:
         url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{terraform.env.version}}.zip
         dest: "{{tmp_dir}}"
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
@@ -263,7 +263,7 @@
       changed_when: not is_tflint_installed.rc == 0
 
     - name: Download tflint binary
-      get_url:
+      ansible.builtin.get_url:
         url: "{{terraform.github}}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
         dest: "{{tmp_dir}}"
       when: (not is_tflint_installed.rc == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
@@ -285,7 +285,7 @@
       changed_when: not is_terraform_docs_installed.rc == 0
 
     - name: Download terraform-docs binary
-      get_url:
+      ansible.builtin.get_url:
         url: "{{terraform.github}}-docs/terraform-docs/\
           releases/download/v{{terraform.docs.version}}/\
           terraform-docs-v{{terraform.docs.version}}-linux-amd64"
