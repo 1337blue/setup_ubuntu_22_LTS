@@ -43,7 +43,7 @@
 
   tasks:
     - name: Create tmp dir
-      file:
+      ansible.builtin.file:
         path: "{{tmp_dir}}"
         state: directory
         mode: '0755'
@@ -212,7 +212,7 @@
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Cleanup tfenv dir
-      file:
+      ansible.builtin.file:
         path: "{{terraform.env.folder}}"
         state: absent
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
@@ -237,7 +237,7 @@
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Link tfenv binaries
-      file:
+      ansible.builtin.file:
         src: "{{item.path}}"
         dest: "/usr/local/bin/{{item.path | basename}}"
         state: link
@@ -335,14 +335,14 @@
 
     - name: Increase watch limit for VSCode
       become: true
-      lineinfile:
+      lineinansible.builtin.file:
         path: /etc/sysctl.conf
         state: present
         line: fs.inotify.max_user_watches=524288
 
     - name: Add direnv hook bash to bashrc
       become: true
-      lineinfile:
+      lineinansible.builtin.file:
         path: /etc/bash.bashrc
         state: present
         line: "{{item}}"
@@ -374,7 +374,7 @@
 
     - name: Allow SSH password authentication
       become: true
-      lineinfile:
+      lineinansible.builtin.file:
         state: present
         regexp: '.*PasswordAuthentication.*'
         line: 'PasswordAuthentication yes'
@@ -390,7 +390,7 @@
       become: true
 
     - name: Cleanup tmp dir
-      file:
+      ansible.builtin.file:
         path: "{{tmp_dir}}"
         state: absent
       become: true
