@@ -285,13 +285,23 @@
       ignore_errors: true
       changed_when: not is_terraform_docs_installed.rc == 0
 
-    - name: Download terraform-docs binary
+    - name: Download terraform-docs
       ansible.builtin.get_url:
         url: "{{ terraform.github }}-docs/terraform-docs/\
           releases/download/v{{ terraform.docs.version }}/\
-          terraform-docs-v{{ terraform.docs.version }}-linux-amd64"
-        dest: /usr/bin/terraform-docs
+          terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
+        dest: "{{ tmp_dir }}"
+        mode: "0644"
+      become: true
+      when: (not is_terraform_docs_installed.rc == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
+
+    - name: Unzip terraform-docs
+      ansible.builtin.unarchive:
+        src: "{{ tmp_dir }}/terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
+        dest: /usr/bin
         mode: "0755"
+        owner: root
+        group: root
       become: true
       when: (not is_terraform_docs_installed.rc == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
