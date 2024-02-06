@@ -322,7 +322,7 @@
       - vscodevim.vim
 
     - name: Check if vscode settings.json exists
-      stat:
+      ansible.builtin.stat:
         path: "{{vscode_settings}}"
       register: st
 
