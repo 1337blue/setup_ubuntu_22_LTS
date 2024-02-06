@@ -23,12 +23,6 @@
       username: x
     repos:
       - package:
-          name: cf-cli
-          repository:
-            cloudfoundry-cli: deb https://packages.cloudfoundry.org/debian stable main
-          public_keys:
-            - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key
-      - package:
           name: helm
           repository:
             helm: deb https://baltocdn.com/helm/stable/debian/ all main
