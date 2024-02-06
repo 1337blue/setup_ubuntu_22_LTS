@@ -218,7 +218,7 @@
       when: (not is_tfenv_installed.rc == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Unzip tfenv
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{tmp_dir}}/tfenv-{{ terraform.env.version }}.zip"
         dest: "{{tmp_dir}}"
         owner: "{{username}}"
@@ -269,7 +269,7 @@
       when: (not is_tflint_installed.rc == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Unzip tflint
-      unarchive:
+      ansible.builtin.unarchive:
         src: "{{tmp_dir}}/tflint_linux_amd64.zip"
         dest: /usr/bin
         mode: '0755'
