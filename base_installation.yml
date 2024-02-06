@@ -341,7 +341,7 @@
       become: true
       ansible.builtin.lineinfile:
         path: /etc/sysctl.conf
-        state: file
+        state: present
         line: fs.inotify.max_user_watches=524288
         mode: "0644"
 
@@ -349,7 +349,7 @@
       become: true
       ansible.builtin.lineinfile:
         path: /etc/bash.bashrc
-        state: file
+        state: present
         line: "{{ item }}"
       loop:
         - eval "$(direnv hook bash)"
@@ -380,7 +380,7 @@
     - name: Allow SSH password authentication
       become: true
       ansible.builtin.lineinfile:
-        state: file
+        state: present
         regexp: '.*PasswordAuthentication.*'
         line: 'PasswordAuthentication yes'
         path: /etc/ssh/sshd_config
