@@ -74,7 +74,7 @@
       become: true
 
     - name: Upgrade Packages
-      apt:
+      ansible.builtin.apt:
         update_cache: true
         upgrade: full
       become: true
@@ -83,7 +83,7 @@
       until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
 
     - name: Install Packages
-      apt:
+      ansible.builtin.apt:
         name: "{{packages}}"
       become: true
       vars:
@@ -148,7 +148,7 @@
         "{{repos}}"
 
     - name: Install non standard packages
-      apt:
+      ansible.builtin.apt:
         name: "{{item.package.name}}"
       become: true
       with_items:
@@ -177,7 +177,7 @@
     # vagrant depends on virtualbox
     # TODO make sure to only install those if required -> avoid download of packages
     - name: Install minikube, vagrant and zoom
-      apt:
+      ansible.builtin.apt:
         deb: "{{item}}"
       become: true
       with_items:
@@ -384,7 +384,7 @@
       when: setup_open_ssh_server | bool
 
     - name: Cleanup apt
-      apt:
+      ansible.builtin.apt:
         autoremove: true
         autoclean: true
       become: true
