@@ -296,7 +296,7 @@
       become: true
       when: (not is_terraform_docs_installed.rc == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
-    - name: fetch VS Code extensions
+    - name: Fetch VS Code extensions
       ansible.builtin.command: code --list-extensions
       register: vs_code_extensions
       changed_when: false
