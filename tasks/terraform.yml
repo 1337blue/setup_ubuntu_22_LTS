@@ -39,6 +39,7 @@
   ansible.builtin.unarchive:
     src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
     dest: "{{ terraform.env.folder }}"
+    mode: "0755"
     owner: "{{ username }}"
     group: "{{ username }}"
     remote_src: true
@@ -73,16 +74,9 @@
   when: install_terraform
   changed_when: true
 
-- name: Download tflint binary
-  ansible.builtin.get_url:
-    url: "{{ terraform.github }}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
-    dest: "{{ tmp_dir }}"
-    mode: "0755"
-  when: install_tflint
-
 - name: Unzip tflint
   ansible.builtin.unarchive:
-    src: "{{ tmp_dir }}/tflint_linux_amd64.zip"
+    src: "{{ terraform.github }}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
     dest: /usr/bin
     mode: "0755"
     owner: root
@@ -90,19 +84,11 @@
   become: true
   when: install_tflint
 
-- name: Download terraform-docs
-  ansible.builtin.get_url:
-    url: "{{ terraform.github }}-docs/terraform-docs/\
-      releases/download/v{{ terraform.docs.version }}/\
-      terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
-    dest: "{{ tmp_dir }}"
-    mode: "0644"
-  become: true
-  when: install_terraform_docs
-
 - name: Unzip terraform-docs
   ansible.builtin.unarchive:
-    src: "{{ tmp_dir }}/terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
+    src: "{{ terraform.github }}-docs/terraform-docs/\
+      releases/download/v{{ terraform.docs.version }}/\
+      terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
     dest: /usr/bin
     mode: "0755"
     owner: root
