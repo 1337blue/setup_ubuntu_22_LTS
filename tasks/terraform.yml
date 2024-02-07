@@ -46,13 +46,18 @@
 - name: Unzip tfenv
   ansible.builtin.unarchive:
     src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
-    dest: "{{ terraform.env.folder }}"
-    mode: "0755"
+    dest: "{{ tmp_dir }}"
+    mode: "1755"
     owner: "{{ username }}"
     group: "{{ username }}"
     remote_src: true
   become: true
   when: install_tfenv
+
+- name: Install tfenv
+  ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
+  when: install_tfenv
+  changed_when: true
 
 - name: Find tfenv binaries
   ansible.builtin.find:
