@@ -8,14 +8,14 @@
   when: item not in vs_code_extensions.stdout
   changed_when: true
   with_items:
-    - DavidAnson.vscode-markdownlint
+    - davidanson.vscode-markdownlint
     - dbaeumer.vscode-eslint
     - eamodio.gitlens
     - hashicorp.terraform
-    - HookyQR.beautify
+    - hookyqr.beautify
     - janjoerke.jenkins-pipeline-linter-connector
-    - jmMeessen.jenkins-declarative-support
-    - magicstack.MagicPython
+    - jmmeessen.jenkins-declarative-support
+    - magicstack.magicpython
     - mhutchie.git-graph
     - ms-azuretools.vscode-docker
     - ms-python.python
