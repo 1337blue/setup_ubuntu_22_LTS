@@ -1,45 +1,7 @@
 - name: Setup working environment
   hosts: localhost
-  vars:
-    setup_open_ssh_server: false
-    tmp_dir: /tmp/ansible
-    username: "{{ lookup ('env', 'USER') }}"
-    home_dir: "{{ lookup ('env', 'HOME') }}"
-    minikube_version: 1.22.0-0
-    vagrant_version: 2.2.10
-    vscode_settings: "{{ home_dir }}/.config/Code/User/settings.json"
-    terraform:
-      version: 1.7.2
-      env:
-        version: 3.0.0
-        folder: "{{ home_dir }}/.tfenv"
-      github: https://github.com/terraform
-      docs:
-        version: 0.17.0
-      lint:
-        version: 0.50.3
-    git:
-      email: x
-      username: x
-    repos:
-      - package:
-          name: helm
-          repository:
-            helm: deb https://baltocdn.com/helm/stable/debian/ all main
-          public_keys:
-            - https://baltocdn.com/helm/signing.asc
-      - package:
-          name: opera-stable
-          repository:
-            opera-stable: deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free
-          public_keys:
-            - https://deb.opera.com/archive.key
-      - package:
-          name: code
-          repository:
-            vscode: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
-          public_keys:
-            - https://packages.microsoft.com/keys/microsoft.asc
+  vars_file:
+    - vars/main.yml
 
   tasks:
     - name: Create tmp dir
