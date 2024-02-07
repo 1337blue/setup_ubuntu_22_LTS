@@ -42,7 +42,7 @@
 - name: Create tfenv dir
   ansible.builtin.file:
     path: "{{ terraform.env.folder }}"
-    state: present
+    state: directory
   when: install_tfenv
 
 - name: Unzip tfenv
