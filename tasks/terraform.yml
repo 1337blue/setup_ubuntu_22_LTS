@@ -29,13 +29,6 @@
     install_tflint: (is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
     install_terraform_docs: (is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
-- name: Download tfenv
-  ansible.builtin.get_url:
-    url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
-    dest: "{{ tmp_dir }}/tfenv-{{ terraform.env.version }}.zip"
-    mode: "0644"
-  when: install_tfenv
-
 - name: Cleanup tfenv dir
   ansible.builtin.file:
     path: "{{ terraform.env.folder }}"
@@ -44,17 +37,13 @@
 
 - name: Unzip tfenv
   ansible.builtin.unarchive:
-    src: "{{ tmp_dir }}/tfenv-{{ terraform.env.version }}.zip"
-    dest: "{{ tmp_dir }}"
+    url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
+    dest: "{{ terraform.env.folder }}"
     owner: "{{ username }}"
     group: "{{ username }}"
+    remote_src: true
   become: true
   when: install_tfenv
-
-- name: Install tfenv
-  ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
-  when: install_tfenv
-  changed_when: true
 
 - name: Find tfenv binaries
   ansible.builtin.find:
@@ -70,7 +59,7 @@
     owner: root
     group: root
   become: true
-  when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+  when: install_tfenv
   with_items:
     - "{{ tf_env_bins.files }}"
 
