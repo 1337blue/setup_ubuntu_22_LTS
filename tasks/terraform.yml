@@ -32,7 +32,7 @@
 - name: Download tfenv
   ansible.builtin.get_url:
     url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
-    dest: "{{ tmp_dir }}/v{{ terraform.env.version }}.zip"
+    dest: "{{ tmp_dir }}/tfenv-{{ terraform.env.version }}.zip"
     mode: "0644"
   when: install_tfenv
 
