@@ -1,26 +1,13 @@
-- name: Is terraform installed?
+- name: Check which terraform tools are installed
   ansible.builtin.shell:
-    cmd: "terraform -v || true"
-  register: is_terraform_installed
+    cmd: "{{ item }} -v || true"
+  register: "is_{{ item }}_installed"
   changed_when: false
-
-- name: Is tfenv installed?
-  ansible.builtin.shell:
-    cmd: "tfenv -v || true"
-  register: is_tfenv_installed
-  changed_when: false
-
-- name: Is tflint installed?
-  ansible.builtin.shell:
-    cmd: "tflint -v || true"
-  register: is_tflint_installed
-  changed_when: false
-
-- name: Is terraform-docs installed?
-  ansible.builtin.shell:
-    cmd: "terraform-docs -v || true"
-  register: is_terraform_docs_installed
-  changed_when: false
+  with_items:
+    - terraform
+    - tf_env
+    - tflint
+    - terraform-docs
 
 - name: Set facts for installing terraform tools
   ansible.builtin.set_fact:
