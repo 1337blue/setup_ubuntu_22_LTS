@@ -37,7 +37,7 @@
 
 - name: Unzip tfenv
   ansible.builtin.unarchive:
-    url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
+    src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
     dest: "{{ terraform.env.folder }}"
     owner: "{{ username }}"
     group: "{{ username }}"
