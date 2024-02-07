@@ -26,7 +26,7 @@
     - name: Config changes
       ansible.builtin.include_tasks: tasks/config.yml
 
-  post_taks:
+  post_tasks:
     - name: Cleanup tmp dir
       ansible.builtin.file:
         path: "{{ tmp_dir }}"
