@@ -1,127 +1,127 @@
-    - name: Upgrade Packages
-      ansible.builtin.apt:
-        update_cache: true
-        upgrade: full
-      become: true
-      register: apt_action
-      retries: 100
-      until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+- name: Upgrade Packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: full
+  become: true
+  register: apt_action
+  retries: 100
+  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
 
-    - name: Install Packages
-      ansible.builtin.apt:
-        name: "{{ packages }}"
-      become: true
-      vars:
-        packages:
-          - ansible-lint
-          - apt-transport-https
-          - build-essential
-          - curl
-          - direnv
-          - docker.io
-          - golang-go
-          - htop
-          - iotop
-          - jq
-          - keepassxc
-          - liblzma-dev
-          - libcurl4-openssl-dev
-          - linux-headers-generic
-          - lm-sensors
-          - net-tools
-          - openjdk-11-jdk
-          - openssh-server
-          - openvpn
-          - patch
-          - powertop
-          - python3-pip
-          - ruby-dev
-          - ruby-libxml
-          - smartmontools
-          - software-properties-common
-          - tree
-          - vim
-          - wget
-          - xpaint
-          - zlib1g-dev
+- name: Install Packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+  become: true
+  vars:
+    packages:
+      - ansible-lint
+      - apt-transport-https
+      - build-essential
+      - curl
+      - direnv
+      - docker.io
+      - golang-go
+      - htop
+      - iotop
+      - jq
+      - keepassxc
+      - liblzma-dev
+      - libcurl4-openssl-dev
+      - linux-headers-generic
+      - lm-sensors
+      - net-tools
+      - openjdk-11-jdk
+      - openssh-server
+      - openvpn
+      - patch
+      - powertop
+      - python3-pip
+      - ruby-dev
+      - ruby-libxml
+      - smartmontools
+      - software-properties-common
+      - tree
+      - vim
+      - wget
+      - xpaint
+      - zlib1g-dev
 
-    - name: Install pip packages
-      ansible.builtin.pip:
-        name:
-          - awscli
-          - docker-compose
-          - pre-commit
-          - yq
+- name: Install pip packages
+  ansible.builtin.pip:
+    name:
+      - awscli
+      - docker-compose
+      - pre-commit
+      - yq
 
-    - name: Import GPG keys
-      ansible.builtin.apt_key:
-        url: "{{ item.1 }}"
-      become: true
-      with_subelements:
-        - "{{ repos }}"
-        - package.public_keys
+- name: Import GPG keys
+  ansible.builtin.apt_key:
+    url: "{{ item.1 }}"
+  become: true
+  with_subelements:
+    - "{{ repos }}"
+    - package.public_keys
 
-    - name: Add apt repos
-      ansible.builtin.apt_repository:
-        repo: "{{ item.package.repository | dict2items | json_query('[].value') | first }}"
-        filename: "{{ item.package.repository | dict2items | json_query('[].key') | first }}"
-      become: true
-      with_items:
-        "{{ repos }}"
+- name: Add apt repos
+  ansible.builtin.apt_repository:
+    repo: "{{ item.package.repository | dict2items | json_query('[].value') | first }}"
+    filename: "{{ item.package.repository | dict2items | json_query('[].key') | first }}"
+  become: true
+  with_items:
+    "{{ repos }}"
 
-    - name: Install non standard packages
-      ansible.builtin.apt:
-        name: "{{ item.package.name }}"
-      become: true
-      with_items:
-        "{{ repos }}"
+- name: Install non standard packages
+  ansible.builtin.apt:
+    name: "{{ item.package.name }}"
+  become: true
+  with_items:
+    "{{ repos }}"
 
-    - name: Install Snap apps
-      snap:
-        name: "{{ item }}"
-        classic: true
-        channel: 1.21/stable
-      become: true
-      with_items:
-        - kubectl
+- name: Install Snap apps
+  snap:
+    name: "{{ item }}"
+    classic: true
+    channel: 1.21/stable
+  become: true
+  with_items:
+    - kubectl
 
-    # vagrant depends on virtualbox
-    - name: Install Snap apps
-      snap:
-        name: "{{ item }}"
-        classic: true
-      become: true
-      with_items:
-        - notepad-plus-plus
-        - slack
-        - spotify
+# vagrant depends on virtualbox
+- name: Install Snap apps
+  snap:
+    name: "{{ item }}"
+    classic: true
+  become: true
+  with_items:
+    - notepad-plus-plus
+    - slack
+    - spotify
 
-    # vagrant depends on virtualbox
-    # TODO make sure to only install those if required -> avoid download of packages
-    - name: Install minikube, vagrant and zoom
-      ansible.builtin.apt:
-        deb: "{{ item }}"
-      become: true
-      with_items:
-        - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
-        - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
-        - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
-        - https://zoom.us/client/latest/zoom_amd64.deb
-      register: deb_packages
+# vagrant depends on virtualbox
+# TODO make sure to only install those if required -> avoid download of packages
+- name: Install minikube, vagrant and zoom
+  ansible.builtin.apt:
+    deb: "{{ item }}"
+  become: true
+  with_items:
+    - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
+    - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
+    - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
+    - https://zoom.us/client/latest/zoom_amd64.deb
+  register: deb_packages
 
-    - name: Set fact for minikube handler
-      ansible.builtin.set_fact:
-        minikube_changes: "{{ deb_packages.results | json_query(\
-          '[?item == `https://storage.googleapis.com/minikube/\
-          releases/latest/minikube_latest_amd64.deb`].changed') }}"
+- name: Set fact for minikube handler
+  ansible.builtin.set_fact:
+    minikube_changes: "{{ deb_packages.results | json_query(\
+      '[?item == `https://storage.googleapis.com/minikube/\
+      releases/latest/minikube_latest_amd64.deb`].changed') }}"
 
-    - name: Make docker the default minikube driver
-      ansible.builtin.command: minikube config set driver docker
-      when: minikube_changes | bool
-      changed_when: true
+- name: Make docker the default minikube driver
+  ansible.builtin.command: minikube config set driver docker
+  when: minikube_changes | bool
+  changed_when: true
 
-    - name: Cleanup apt
-      ansible.builtin.apt:
-        autoremove: true
-        autoclean: true
-      become: true
+- name: Cleanup apt
+  ansible.builtin.apt:
+    autoremove: true
+    autoclean: true
+  become: true
