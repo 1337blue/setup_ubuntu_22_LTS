@@ -15,7 +15,7 @@ terraform:
       version: 3.0.0
       install: true
       folder: "{{ home_dir }}/.tfenv"
-    terraform-docs:
+    terraform_docs:
       version: 0.17.0
       install: true
     tflint:
