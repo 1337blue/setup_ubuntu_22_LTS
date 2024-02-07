@@ -3,13 +3,14 @@
   vars_files:
     - vars/main.yml
 
-  tasks:
+  pre_tasks:
     - name: Create tmp dir
       ansible.builtin.file:
         path: "{{ tmp_dir }}"
         state: directory
         mode: "0755"
 
+  tasks:
     - name: Configure git
       ansible.builtin.include_tasks: tasks/git.yml
 
@@ -25,6 +26,7 @@
     - name: Config changes
       ansible.builtin.include_tasks: tasks/config.yml
 
+  post_taks:
     - name: Cleanup tmp dir
       ansible.builtin.file:
         path: "{{ tmp_dir }}"
