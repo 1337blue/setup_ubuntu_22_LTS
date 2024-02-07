@@ -37,7 +37,7 @@
   ansible.builtin.file:
     path: "{{ terraform.env.folder }}"
     state: "{{ item }}"
-    mode: "1755"
+    mode: "1775"
   when: install_tfenv
   with_items:
     - absent
@@ -47,7 +47,7 @@
   ansible.builtin.unarchive:
     src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
     dest: "{{ tmp_dir }}"
-    mode: "1755"
+    mode: "1775"
     owner: "{{ username }}"
     group: "{{ username }}"
     remote_src: true
