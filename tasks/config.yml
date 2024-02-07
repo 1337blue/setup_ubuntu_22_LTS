@@ -37,18 +37,3 @@
         mode: "0644"
       notify: Enable and restart sshd
       when: setup_open_ssh_server | bool
-
-  handlers:
-    - name: Enable and restart sshd
-      ansible.builtin.service:
-        name: sshd
-        enabled: true
-        state: restarted
-      become: true
-
-    - name: Restart docker
-      ansible.builtin.service:
-        name: docker
-        enabled: true
-        state: restarted
-      become: true
