@@ -10,6 +10,22 @@
   register: is_tfenv_installed
   changed_when: false
 
+- name: Is tflint installed?
+  ansible.builtin.shell:
+    cmd: "tflint -v || true"
+  register: is_tflint_installed
+  changed_when: false
+
+- name: Is terraform-docs installed?
+  ansible.builtin.shell:
+    cmd: "terraform-docs -v || true"
+  register: is_terraform_docs_installed
+  changed_when: false
+
+- name: Set fact install terraform
+  ansible.builtin.set_fact:
+    install_terraform: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+
 - name: Download tfenv
   ansible.builtin.get_url:
     url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
@@ -57,19 +73,13 @@
 
 - name: Install terraform
   ansible.builtin.command: tfenv install {{ terraform.version }}
-  when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+  when: "{{ install_terraform }}"
   changed_when: true
 
 - name: Setup terraform
   ansible.builtin.command: tfenv use {{ terraform.version }}
-  when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+  when: "{{ install_terraform }}"
   changed_when: true
-
-- name: Is tflint installed?
-  ansible.builtin.shell:
-    cmd: "tflint -v || true"
-  register: is_tflint_installed
-  changed_when: false
 
 - name: Download tflint binary
   ansible.builtin.get_url:
@@ -87,12 +97,6 @@
     group: root
   become: true
   when: (is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
-
-- name: Is terraform-docs installed?
-  ansible.builtin.shell:
-    cmd: "terraform-docs -v || true"
-  register: is_terraform_docs_installed
-  changed_when: false
 
 - name: Download terraform-docs
   ansible.builtin.get_url:
