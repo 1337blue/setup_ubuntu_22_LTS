@@ -229,6 +229,7 @@
     - name: Install tfenv
       ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
       when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      changed_when: true
 
     - name: Find tfenv binaries
       ansible.builtin.find:
@@ -251,10 +252,12 @@
     - name: Install terraform
       ansible.builtin.command: tfenv install {{ terraform.version }}
       when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+      changed_when: true
 
     - name: Setup terraform
       ansible.builtin.command: tfenv use {{ terraform.version }}
       when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+      changed_when: true
 
     - name: Is tflint installed?
       ansible.builtin.shell:
@@ -313,6 +316,7 @@
     - name: Install VS Code extensions
       ansible.builtin.command: code --install-extension "{{ item }}"
       when: item not in vs_code_extensions.stdout
+      changed_when: true
       with_items:
         - DavidAnson.vscode-markdownlint
         - dbaeumer.vscode-eslint
@@ -381,6 +385,7 @@
     - name: Make docker the default minikube driver
       ansible.builtin.command: minikube config set driver docker
       when: minikube_changes | bool
+      changed_when: true
 
     - name: Allow SSH password authentication
       become: true
