@@ -37,6 +37,7 @@
   ansible.builtin.file:
     path: "{{ terraform.env.folder }}"
     state: "{{ item }}"
+    mode: "1755"
   when: install_tfenv
   with_items:
     - absent
