@@ -209,13 +209,13 @@
         url: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
         dest: "{{ tmp_dir }}"
         mode: "0644"
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Cleanup tfenv dir
       ansible.builtin.file:
         path: "{{ terraform.env.folder }}"
         state: absent
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Unzip tfenv
       ansible.builtin.unarchive:
@@ -224,17 +224,17 @@
         owner: "{{ username }}"
         group: "{{ username }}"
       become: true
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Install tfenv
       ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.env.version }} {{ terraform.env.folder }}"
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Find tfenv binaries
       ansible.builtin.find:
         paths: "{{ terraform.env.folder }}/bin"
       register: tf_env_bins
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Link tfenv binaries
       ansible.builtin.file:
@@ -244,17 +244,17 @@
         owner: root
         group: root
       become: true
-      when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
+      when: (is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
       with_items:
         - "{{ tf_env_bins.files }}"
 
     - name: Install terraform
       ansible.builtin.command: tfenv install {{ terraform.version }}
-      when: (not is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+      when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Setup terraform
       ansible.builtin.command: tfenv use {{ terraform.version }}
-      when: (not is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
+      when: (is_terraform_installed.stdout_lines | length == 0 or not terraform.version in is_terraform_installed.stdout_lines[0])
 
     - name: Is tflint installed?
       ansible.builtin.shell:
@@ -267,7 +267,7 @@
         url: "{{ terraform.github }}-linters/tflint/releases/download/v{{ terraform.lint.version }}/tflint_linux_amd64.zip"
         dest: "{{ tmp_dir }}"
         mode: "0755"
-      when: (not is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
+      when: (is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Unzip tflint
       ansible.builtin.unarchive:
@@ -277,7 +277,7 @@
         owner: root
         group: root
       become: true
-      when: (not is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
+      when: (is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Is terraform-docs installed?
       ansible.builtin.shell:
@@ -293,7 +293,7 @@
         dest: "{{ tmp_dir }}"
         mode: "0644"
       become: true
-      when: (not is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
+      when: (is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: Unzip terraform-docs
       ansible.builtin.unarchive:
@@ -303,7 +303,7 @@
         owner: root
         group: root
       become: true
-      when: (not is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
+      when: (is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: Fetch VS Code extensions
       ansible.builtin.command: code --list-extensions
