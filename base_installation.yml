@@ -196,11 +196,13 @@
       ansible.builtin.shell:
         cmd: "which terraform || true"
       register: is_terraform_installed
+      changed_when: false
 
     - name: Is tfenv installed?
       ansible.builtin.shell:
         cmd: "which tfenv || true"
       register: is_tfenv_installed
+      changed_when: false
 
     - name: Download tfenv
       ansible.builtin.get_url:
@@ -258,6 +260,7 @@
       ansible.builtin.shell:
         cmd: "which tflint || true"
       register: is_tflint_installed
+      changed_when: false
 
     - name: Download tflint binary
       ansible.builtin.get_url:
@@ -280,6 +283,7 @@
       ansible.builtin.shell:
         cmd: "which terraform-docs || true"
       register: is_terraform_docs_installed
+      changed_when: false
 
     - name: Download terraform-docs
       ansible.builtin.get_url:
