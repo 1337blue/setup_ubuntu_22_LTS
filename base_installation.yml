@@ -49,19 +49,19 @@
         mode: "0755"
 
     - name: Configure git
-      include_tasks: tasks/git.yml
+      ansible.builtin.include_tasks: tasks/git.yml
 
     - name: Install packages
-      include_tasks: tasks/packages.yml
+      ansible.builtin.include_tasks: tasks/packages.yml
 
     - name: Install terraform tools
-      include_tasks: tasks/terraform.yml
+      ansible.builtin.include_tasks: tasks/terraform.yml
 
     - name: Configure vscode
-      include_tasks: tasks/vscode.yml
+      ansible.builtin.include_tasks: tasks/vscode.yml
 
     - name: Config changes
-      include_tasks: tasks/config.yml
+      ansible.builtin.include_tasks: tasks/config.yml
 
     - name: Cleanup tmp dir
       ansible.builtin.file:
@@ -70,4 +70,4 @@
       become: true
 
   handlers:
-    - import_tasks: handlers/main.yml
+    - ansible.builtin.import_tasks: handlers/main.yml
