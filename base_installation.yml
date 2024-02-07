@@ -1,7 +1,8 @@
 - name: Setup working environment
   hosts: localhost
-  vars_files:
-    - vars/main.yml
+  vars:
+    vars_files:
+      - vars/main.yml
 
   tasks:
     - name: Create tmp dir
