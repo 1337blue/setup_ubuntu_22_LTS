@@ -13,8 +13,8 @@
     - name: Configure git
       ansible.builtin.include_tasks: tasks/git.yml
 
-    - name: Install packages
-      ansible.builtin.include_tasks: tasks/packages.yml
+#    - name: Install packages
+#      ansible.builtin.include_tasks: tasks/packages.yml
 
     - name: Install terraform tools
       ansible.builtin.include_tasks: tasks/terraform.yml
