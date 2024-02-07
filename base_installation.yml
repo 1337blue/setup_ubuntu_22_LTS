@@ -194,13 +194,13 @@
 
     - name: Is terraform installed?
       ansible.builtin.shell:
-        cmd: "which terraform || true"
+        cmd: "which terraform || terraform -v"
       register: is_terraform_installed
       changed_when: false
 
     - name: Is tfenv installed?
       ansible.builtin.shell:
-        cmd: "which tfenv || true"
+        cmd: "which tfenv || tfenv -v"
       register: is_tfenv_installed
       changed_when: false
 
@@ -261,7 +261,7 @@
 
     - name: Is tflint installed?
       ansible.builtin.shell:
-        cmd: "which tflint || true"
+        cmd: "which tflint || tflint -v"
       register: is_tflint_installed
       changed_when: false
 
@@ -284,7 +284,7 @@
 
     - name: Is terraform-docs installed?
       ansible.builtin.shell:
-        cmd: "which terraform-docs || true"
+        cmd: "which terraform-docs || terraform-docs -v"
       register: is_terraform_docs_installed
       changed_when: false
 
