@@ -70,4 +70,5 @@
       become: true
 
   handlers:
-    - ansible.builtin.import_tasks: handlers/main.yml
+    - name: Include handlers
+      ansible.builtin.import_tasks: handlers/main.yml
