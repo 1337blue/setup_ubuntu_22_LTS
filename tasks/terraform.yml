@@ -36,14 +36,11 @@
 - name: Cleanup tfenv dir
   ansible.builtin.file:
     path: "{{ terraform.env.folder }}"
-    state: absent
+    state: "{{ item }}"
   when: install_tfenv
-
-- name: Create tfenv dir
-  ansible.builtin.file:
-    path: "{{ terraform.env.folder }}"
-    state: directory
-  when: install_tfenv
+  with_items:
+    - absent
+    - directory
 
 - name: Unzip tfenv
   ansible.builtin.unarchive:
