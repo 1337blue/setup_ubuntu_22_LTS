@@ -10,17 +10,13 @@ terraform:
   tools:
     terraform:
       version: 1.7.2
-      install: true
     tfenv:
       version: 3.0.0
-      install: true
       folder: "{{ home_dir }}/.tfenv"
     terraform_docs:
       version: 0.17.0
-      install: true
     tflint:
       version: 0.50.3
-    install: true
 git:
   email: x
   username: x
