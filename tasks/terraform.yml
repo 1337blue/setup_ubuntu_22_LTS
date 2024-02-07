@@ -39,6 +39,12 @@
     state: absent
   when: install_tfenv
 
+- name: Create tfenv dir
+  ansible.builtin.file:
+    path: "{{ terraform.env.folder }}"
+    state: present
+  when: install_tfenv
+
 - name: Unzip tfenv
   ansible.builtin.unarchive:
     src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.env.version }}.zip
