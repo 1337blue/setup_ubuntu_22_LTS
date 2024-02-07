@@ -25,19 +25,19 @@
 - name: Set facts for installing terraform tools
   ansible.builtin.set_fact:
     install_tfenv: |
-      "{{ (is_tfenv_installed.stdout_lines | length == 0 or not terraform.tools.tfenv.version in is_tfenv_installed.stdout_lines[0]) }}"
+      (is_tfenv_installed.stdout_lines | length == 0 or not terraform.tools.tfenv.version in is_tfenv_installed.stdout_lines[0])
     install_terraform: |
-      "{{ (is_terraform_installed.stdout_lines | length == 0 or not terraform.tools.terraform.version in is_terraform_installed.stdout_lines[0]) }}"
+      (is_terraform_installed.stdout_lines | length == 0 or not terraform.tools.terraform.version in is_terraform_installed.stdout_lines[0])
     install_tflint: |
-      "{{ (is_tflint_installed.stdout_lines | length == 0 or not terraform.tools.tflint.version in is_tflint_installed.stdout_lines[0]) }}"
+      (is_tflint_installed.stdout_lines | length == 0 or not terraform.tools.tflint.version in is_tflint_installed.stdout_lines[0])
     install_terraform_docs: |
-      "{{ (is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.tools.terraform_docs.version in is_terraform_docs_installed.stdout_lines[0]) }}"
+      (is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.tools.terraform_docs.version in is_terraform_docs_installed.stdout_lines[0])
 
 - name: Cleanup tfenv dir
   ansible.builtin.file:
     path: "{{ terraform.tools.tfenv.folder }}"
     state: absent
-  when: install_tfenv | bool
+  when: install_tfenv
 
 - name: Unzip tfenv
   ansible.builtin.unarchive:
@@ -48,18 +48,18 @@
     group: "{{ username }}"
     remote_src: true
   become: true
-  when: install_tfenv | bool
+  when: install_tfenv
 
 - name: Install tfenv
   ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.tools.tfenv.version }} {{ terraform.env.folder }}"
-  when: install_tfenv | bool
+  when: install_tfenv
   changed_when: true
 
 - name: Find tfenv binaries
   ansible.builtin.find:
     paths: "{{ terraform.tools.tfenv.folder }}/bin"
   register: tf_env_bins
-  when: install_tfenv | bool
+  when: install_tfenv
 
 - name: Link tfenv binaries
   ansible.builtin.file:
@@ -69,18 +69,18 @@
     owner: root
     group: root
   become: true
-  when: install_tfenv | bool
+  when: install_tfenv
   with_items:
     - "{{ tf_env_bins.files }}"
 
 - name: Install terraform
   ansible.builtin.command: tfenv install {{ terraform.tools.version }}
-  when: install_terraform | bool
+  when: install_terraform
   changed_when: true
 
 - name: Setup terraform
   ansible.builtin.command: tfenv use {{ terraform.tools.version }}
-  when: install_terraform | bool
+  when: install_terraform
   changed_when: true
 
 - name: Unzip tflint
@@ -92,7 +92,7 @@
     group: root
     remote_src: true
   become: true
-  when: install_tflint | bool
+  when: install_tflint
 
 - name: Unzip terraform-docs
   ansible.builtin.unarchive:
@@ -105,4 +105,4 @@
     group: root
     remote_src: true
   become: true
-  when: install_terraform_docs | bool
+  when: install_terraform_docs
