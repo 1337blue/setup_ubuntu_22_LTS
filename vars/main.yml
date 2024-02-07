@@ -5,16 +5,21 @@ home_dir: "{{ lookup('env', 'HOME') }}"
 minikube_version: 1.22.0-0
 vagrant_version: 2.2.10
 vscode_settings: "{{ home_dir }}/.config/Code/User/settings.json"
-terraform:
-  version: 1.7.2
+terraform_tools:
+  terraform:
+    version: 1.7.2
+    install: true
   env:
     version: 3.0.0
+    install: true
     folder: "{{ home_dir }}/.tfenv"
   github: https://github.com/terraform
   docs:
     version: 0.17.0
+    install: true
   lint:
     version: 0.50.3
+    install: true
 git:
   email: x
   username: x
