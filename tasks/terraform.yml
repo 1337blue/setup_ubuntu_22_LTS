@@ -51,7 +51,7 @@
   when: install_tfenv
 
 - name: Install tfenv
-  ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.tools.tfenv.version }} {{ terraform.tfenv.folder }}"
+  ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.tools.tfenv.version }} {{ terraform.tools.tfenv.folder }}"
   when: install_tfenv
   changed_when: true
 
