@@ -3,7 +3,7 @@
   collections:
     - community.general
   vars:
-    setup_open_ssh_server: false
+    setup_open_ssh_server: False
     tmp_dir: /tmp/ansible
     username: "{{ lookup ('env', 'USER') }}"
     home_dir: "{{ lookup ('env', 'HOME') }}"
@@ -55,7 +55,7 @@
         name: user.email
         scope: system
         value: "{{ git.email }}"
-      become: true
+      become: True
       when:
         - '"@" in git.email'
 
@@ -64,7 +64,7 @@
         name: user.name
         scope: system
         value: "{{ git.username }}"
-      become: true
+      become: True
       when:
         - 'git.username | length > 1'
 
@@ -73,13 +73,13 @@
         name: user.editor
         scope: system
         value: vim
-      become: true
+      become: True
 
     - name: Upgrade Packages
       ansible.builtin.apt:
-        update_cache: true
+        update_cache: True
         upgrade: full
-      become: true
+      become: True
       register: apt_action
       retries: 100
       until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
@@ -87,7 +87,7 @@
     - name: Install Packages
       ansible.builtin.apt:
         name: "{{ packages }}"
-      become: true
+      become: True
       vars:
         packages:
           - ansible-lint
@@ -133,7 +133,7 @@
     - name: Import GPG keys
       ansible.builtin.apt_key:
         url: "{{ item.1 }}"
-      become: true
+      become: True
       with_subelements:
         - "{{ repos }}"
         - package.public_keys
@@ -142,23 +142,23 @@
       ansible.builtin.apt_repository:
         repo: "{{ item.package.repository | dict2items | json_query('[].value') | first }}"
         filename: "{{ item.package.repository | dict2items | json_query('[].key') | first }}"
-      become: true
+      become: True
       with_items:
         "{{ repos }}"
 
     - name: Install non standard packages
       ansible.builtin.apt:
         name: "{{ item.package.name }}"
-      become: true
+      become: True
       with_items:
         "{{ repos }}"
 
     - name: Install Snap apps
       snap:
         name: "{{ item }}"
-        classic: true
+        classic: True
         channel: 1.21/stable
-      become: true
+      become: True
       with_items:
         - kubectl
 
@@ -166,8 +166,8 @@
     - name: Install Snap apps
       snap:
         name: "{{ item }}"
-        classic: true
-      become: true
+        classic: True
+      become: True
       with_items:
         - notepad-plus-plus
         - slack
@@ -178,7 +178,7 @@
     - name: Install minikube, vagrant and zoom
       ansible.builtin.apt:
         deb: "{{ item }}"
-      become: true
+      become: True
       with_items:
         - https://github.com/gopasspw/gopass/releases/download/v1.13.0/gopass_1.13.0_linux_amd64.deb
         - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
@@ -194,15 +194,15 @@
 
     - name: Is terraform installed?
       ansible.builtin.shell:
-        cmd: "which terraform || true"
+        cmd: "which terraform || True"
       register: is_terraform_installed
-      changed_when: false
+      changed_when: False
 
     - name: Is tfenv installed?
       ansible.builtin.shell:
-        cmd: "which tfenv || true"
+        cmd: "which tfenv || True"
       register: is_tfenv_installed
-      changed_when: false
+      changed_when: False
 
     - name: Download tfenv
       ansible.builtin.get_url:
@@ -223,7 +223,7 @@
         dest: "{{ tmp_dir }}"
         owner: "{{ username }}"
         group: "{{ username }}"
-      become: true
+      become: True
       when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
 
     - name: Install tfenv
@@ -243,7 +243,7 @@
         state: link
         owner: root
         group: root
-      become: true
+      become: True
       when: (not is_tfenv_installed.stdout_lines | length == 0 or not terraform.env.version in is_tfenv_installed.stdout_lines[0])
       with_items:
         - "{{ tf_env_bins.files }}"
@@ -258,9 +258,9 @@
 
     - name: Is tflint installed?
       ansible.builtin.shell:
-        cmd: "which tflint || true"
+        cmd: "which tflint || True"
       register: is_tflint_installed
-      changed_when: false
+      changed_when: False
 
     - name: Download tflint binary
       ansible.builtin.get_url:
@@ -276,14 +276,14 @@
         mode: "0755"
         owner: root
         group: root
-      become: true
+      become: True
       when: (not is_tflint_installed.stdout_lines | length == 0 or not terraform.lint.version in is_tflint_installed.stdout_lines[0])
 
     - name: Is terraform-docs installed?
       ansible.builtin.shell:
-        cmd: "which terraform-docs || true"
+        cmd: "which terraform-docs || True"
       register: is_terraform_docs_installed
-      changed_when: false
+      changed_when: False
 
     - name: Download terraform-docs
       ansible.builtin.get_url:
@@ -292,7 +292,7 @@
           terraform-docs-v{{ terraform.docs.version }}-linux-amd64.tar.gz"
         dest: "{{ tmp_dir }}"
         mode: "0644"
-      become: true
+      become: True
       when: (not is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: Unzip terraform-docs
@@ -302,13 +302,13 @@
         mode: "0755"
         owner: root
         group: root
-      become: true
+      become: True
       when: (not is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.docs.version in is_terraform_docs_installed.stdout_lines[0])
 
     - name: Fetch VS Code extensions
       ansible.builtin.command: code --list-extensions
       register: vs_code_extensions
-      changed_when: false
+      changed_when: False
 
     - name: Install VS Code extensions
       ansible.builtin.command: code --install-extension "{{ item }}"
@@ -343,7 +343,7 @@
       when: not st.stat.exists
 
     - name: Increase watch limit for VSCode
-      become: true
+      become: True
       ansible.builtin.lineinfile:
         path: /etc/sysctl.conf
         state: present
@@ -351,7 +351,7 @@
         mode: "0644"
 
     - name: Add direnv hook bash to bashrc
-      become: true
+      become: True
       ansible.builtin.lineinfile:
         path: /etc/bash.bashrc
         state: present
@@ -366,14 +366,14 @@
         name: docker
         state: present
         gid: 1750
-      become: true
+      become: True
 
     - name: Append the user to required groups
       ansible.builtin.user:
         name: "{{ username }}"
         groups: "{{ item }}"
-        append: true
-      become: true
+        append: True
+      become: True
       notify: Restart docker
       with_items:
         - docker
@@ -383,7 +383,7 @@
       when: minikube_changes | bool
 
     - name: Allow SSH password authentication
-      become: true
+      become: True
       ansible.builtin.lineinfile:
         state: present
         regexp: '.*PasswordAuthentication.*'
@@ -396,27 +396,27 @@
 
     - name: Cleanup apt
       ansible.builtin.apt:
-        autoremove: true
-        autoclean: true
-      become: true
+        autoremove: True
+        autoclean: True
+      become: True
 
     - name: Cleanup tmp dir
       ansible.builtin.file:
         path: "{{ tmp_dir }}"
         state: absent
-      become: true
+      become: True
 
   handlers:
     - name: Enable and restart sshd
       ansible.builtin.service:
         name: sshd
-        enabled: true
+        enabled: True
         state: restarted
-      become: true
+      become: True
 
     - name: Restart docker
       ansible.builtin.service:
         name: docker
-        enabled: true
+        enabled: True
         state: restarted
-      become: true
+      become: True
