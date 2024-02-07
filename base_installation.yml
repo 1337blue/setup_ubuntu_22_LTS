@@ -1,7 +1,5 @@
 - name: Setup working environment
   hosts: localhost
-  collections:
-    - community.general
   vars:
     setup_open_ssh_server: false
     tmp_dir: /tmp/ansible
