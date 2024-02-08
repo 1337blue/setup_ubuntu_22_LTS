@@ -1,4 +1,4 @@
-- name: Add direnv hook bash to bashrc
+- name: Add config to bashrc
   become: true
   ansible.builtin.lineinfile:
     path: /etc/bash.bashrc
@@ -8,6 +8,7 @@
     - eval "$(direnv hook bash)"
     - export PATH="$HOME/.local/bin:$PATH"
     - source <(kubectl completion bash)
+    - export k=kubectl
 
 - name: Ensure group "docker" exists with correct gid
   ansible.builtin.group:
