@@ -46,4 +46,4 @@ repos:
       repository:
         kubectl: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/ /"
       public_keys:
-       - "https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/Release.key"
+        - "https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/Release.key"
