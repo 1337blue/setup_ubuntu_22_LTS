@@ -33,7 +33,7 @@
   ansible.builtin.file:
     path: "{{ terraform.tools.tfenv.folder }}"
     state: absent
-  when: install_tfenv
+  when: install_tfenv | bool
 
 - name: Unzip tfenv
   ansible.builtin.unarchive:
@@ -44,18 +44,18 @@
     group: "{{ username }}"
     remote_src: true
   become: true
-  when: install_tfenv
+  when: install_tfenv | bool
 
 - name: Install tfenv
   ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.tools.tfenv.version }} {{ terraform.tools.tfenv.folder }}"
-  when: install_tfenv
+  when: install_tfenv | bool
   changed_when: true
 
 - name: Find tfenv binaries
   ansible.builtin.find:
     paths: "{{ terraform.tools.tfenv.folder }}/bin"
   register: tf_env_bins
-  when: install_tfenv
+  when: install_tfenv | bool
 
 - name: Link tfenv binaries
   ansible.builtin.file:
@@ -65,18 +65,18 @@
     owner: root
     group: root
   become: true
-  when: install_tfenv
+  when: install_tfenv | bool
   with_items:
     - "{{ tf_env_bins.files }}"
 
 - name: Install terraform
   ansible.builtin.command: tfenv install {{ terraform.tools.terraform.version }}
-  when: install_terraform
+  when: install_terraform | bool
   changed_when: true
 
 - name: Setup terraform
   ansible.builtin.command: tfenv use {{ terraform.tools.terraform.version }}
-  when: install_terraform
+  when: install_terraform | bool
   changed_when: true
 
 - name: Unzip tflint
@@ -88,7 +88,7 @@
     group: root
     remote_src: true
   become: true
-  when: install_tflint
+  when: install_tflint | bool
 
 - name: Unzip terraform-docs
   ansible.builtin.unarchive:
@@ -101,4 +101,4 @@
     group: root
     remote_src: true
   become: true
-  when: install_terraform_docs
+  when: install_terraform_docs | bool
