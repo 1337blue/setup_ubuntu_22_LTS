@@ -1,13 +1,13 @@
-- name: Is terraform installed?
-  ansible.builtin.shell:
-    cmd: "terraform -v || true"
-  register: is_terraform_installed
-  changed_when: false
-
 - name: Is tfenv installed?
   ansible.builtin.shell:
     cmd: "tfenv -v || true"
   register: is_tfenv_installed
+  changed_when: false
+
+- name: Is terraform installed?
+  ansible.builtin.shell:
+    cmd: "terraform -v || true"
+  register: is_terraform_installed
   changed_when: false
 
 - name: Is tflint installed?
