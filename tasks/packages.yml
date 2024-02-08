@@ -76,7 +76,6 @@
   with_items:
     "{{ repos }}"
 
-# vagrant depends on virtualbox
 - name: Install Snap apps
   snap:
     name: "{{ item }}"
