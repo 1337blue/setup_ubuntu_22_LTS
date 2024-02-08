@@ -27,14 +27,14 @@
 - name: Check if vscode settings.json exists
   ansible.builtin.stat:
     path: "{{ vscode_settings }}"
-  register: st
+  register: settings
 
 - name: Copy vscode settings.json
   ansible.builtin.copy:
     src: ./conf/settings.json
     dest: "{{ vscode_settings }}"
     mode: "0644"
-  when: not st.stat.exists
+  when: not setttings.stat.exists
 
 - name: Increase watch limit for VSCode
   become: true
