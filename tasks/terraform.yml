@@ -24,10 +24,15 @@
 
 - name: Set facts for installing terraform tools
   ansible.builtin.set_fact:
-    install_tfenv: "{{ is_tfenv_installed.stdout_lines | length == 0 or not terraform.tools.tfenv.version in is_tfenv_installed.stdout_lines[0] }}"
-    install_terraform: "{{ is_terraform_installed.stdout_lines | length == 0 or not terraform.tools.terraform.version in is_terraform_installed.stdout_lines[0] }}"
-    install_tflint: "{{ is_tflint_installed.stdout_lines | length == 0 or not terraform.tools.tflint.version in is_tflint_installed.stdout_lines[0] }}"
-    install_terraform_docs: "{{ is_terraform_docs_installed.stdout_lines | length == 0 or not terraform.tools.terraform_docs.version in is_terraform_docs_installed.stdout_lines[0] }}"
+    install_tfenv: "{{ is_tfenv_installed.stdout_lines | length == 0 or\n
+      not terraform.tools.tfenv.version in is_tfenv_installed.stdout_lines[0] or\n
+      is_terraform_installed.stdout_lines | length == 0 }}"
+    install_terraform: "{{ is_terraform_installed.stdout_lines | length == 0 or\n
+      not terraform.tools.terraform.version in is_terraform_installed.stdout_lines[0] }}"
+    install_tflint: "{{ is_tflint_installed.stdout_lines | length == 0 or\n
+      not terraform.tools.tflint.version in is_tflint_installed.stdout_lines[0] }}"
+    install_terraform_docs: "{{ is_terraform_docs_installed.stdout_lines | length == 0 or\n
+      not terraform.tools.terraform_docs.version in is_terraform_docs_installed.stdout_lines[0] }}"
 
 - name: Cleanup tfenv dir
   ansible.builtin.file:
