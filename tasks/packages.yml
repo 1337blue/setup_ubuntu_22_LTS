@@ -76,15 +76,6 @@
   with_items:
     "{{ repos }}"
 
-- name: Install Snap apps
-  snap:
-    name: "{{ item }}"
-    classic: true
-    channel: 1.21/stable
-  become: true
-  with_items:
-    - kubectl
-
 # vagrant depends on virtualbox
 - name: Install Snap apps
   snap:
