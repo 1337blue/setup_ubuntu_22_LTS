@@ -56,11 +56,11 @@
 # TODO only install vagrant when not running as a guest system
 - name: Install gopass, minikube, vagrant and zoom
   ansible.builtin.apt:
-    deb: "{{ item.url }}"
+    deb: "{{ item[1].url }}"
   become: true
   register: installed_deb_packages
   when: not item.key in ansible_facts.packages.keys() and\n
-        not item.version in ansible_facts.packages.{{ item.key }}[0].version
+        not item[0].version in ansible_facts.packages.{{ item.key }}[0].version
   with_items:
     "{{ deb_packages }}"
 
