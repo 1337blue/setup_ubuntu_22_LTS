@@ -97,8 +97,8 @@
 
 - name: Unzip terraform-docs
   ansible.builtin.unarchive:
-    src: "{{ terraform.github }}-docs/terraform-docs/\
-      releases/download/v{{ terraform.tools.terraform_docs.version }}/\
+    src: "{{ terraform.github }}-docs/terraform-docs/\n
+      releases/download/v{{ terraform.tools.terraform_docs.version }}/\n
       terraform-docs-v{{ terraform.tools.terraform_docs.version }}-linux-amd64.tar.gz"
     dest: /usr/bin
     mode: "0755"
