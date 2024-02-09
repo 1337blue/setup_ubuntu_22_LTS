@@ -50,13 +50,12 @@
   become: true
 
 # TODO make sure to only install those if required -> avoid download of packages
-- name: Install gopass, kubectl, minikube, vagrant and zoom
+- name: Install gopass, minikube, vagrant and zoom
   ansible.builtin.apt:
     deb: "{{ item }}"
   become: true
   with_items:
     - https://github.com/gopasspw/gopass/releases/download/v{{ gopass_version }}/gopass_{{ gopass_version }}_linux_amd64.deb
-    - https://dl.k8s.io/release/v{{ kubectl_version }}/bin/linux/amd64/kubectl
     - https://storage.googleapis.com/minikube/releases/latest/minikube_{{ minikube_version }}_amd64.deb
     - https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_x86_64.deb
     - https://zoom.us/client/latest/zoom_amd64.deb
