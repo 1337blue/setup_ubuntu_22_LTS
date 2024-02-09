@@ -1,9 +1,21 @@
 setup_open_ssh_server: false
 tmp_dir: /tmp/ansible
-gopass_version: 1.13.0
-kubectl_version: 1.29.1
-minikube_version: 1.31.2-0
-vagrant_version: 2.2.10
+deb_packages:
+  - gopass:
+      version: 1.13.0
+      url: https://github.com/gopasspw/gopass/releases/download/v{{ deb_packages.gopass.version }}/gopass_{{ deb_packages.gopass.version }}_linux_amd64.deb
+  - kubectl:
+      version: 1.29.1
+      url: https://dl.k8s.io/release/v{{ deb_packages.kubectl.version }}/bin/linux/amd64/kubectl
+  - minikube:
+      version: 1.31.2-0
+      url: https://storage.googleapis.com/minikube/releases/latest/minikube_{{ deb_packages.minikube.version }}_amd64.deb
+  - vagrant:
+      version: 2.2.10
+      url: https://releases.hashicorp.com/vagrant/{{ deb_packages.vagrant.version }}/vagrant_{{ deb_packages.vagrant.version }}_x86_64.deb
+  - zoom:
+      version: latest
+      url: https://zoom.us/client/{{ installed_deb_packages.zoom.version }}/zoom_amd64.deb
 vscode_settings: "{{ ansible_facts.user_dir }}/.config/Code/User/settings.json"
 terraform:
   github: https://github.com/terraform
