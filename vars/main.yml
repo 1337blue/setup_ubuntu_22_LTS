@@ -4,7 +4,7 @@ gopass_version: 1.13.0
 kubectl_version: 1.29.1
 minikube_version: 1.31.2-0
 vagrant_version: 2.2.10
-vscode_settings: "{{ home_dir }}/.config/Code/User/settings.json"
+vscode_settings: "{{ ansible_facts.user_dir }}/.config/Code/User/settings.json"
 terraform:
   github: https://github.com/terraform
   tools:
@@ -12,7 +12,7 @@ terraform:
       version: 1.7.2
     tfenv:
       version: 3.0.0
-      folder: "{{ home_dir }}/.tfenv"
+      folder: "{{ ansible_facts.user_dir }}/.tfenv"
     terraform_docs:
       version: 0.17.0
     tflint:
