@@ -9,41 +9,8 @@
 
 - name: Install Packages
   ansible.builtin.apt:
-    name: "{{ packages }}"
+    name: "{{ apt.packages }}"
   become: true
-  vars:
-    packages:
-      - ansible-lint
-      - apt-transport-https
-      - build-essential
-      - curl
-      - direnv
-      - docker.io
-      - golang-go
-      - htop
-      - iotop
-      - jq
-      - keepassxc
-      - liblzma-dev
-      - libcurl4-openssl-dev
-      - linux-headers-generic
-      - lm-sensors
-      - net-tools
-      - openjdk-11-jdk
-      - openssh-server
-      - openvpn
-      - patch
-      - powertop
-      - python3-pip
-      - ruby-dev
-      - ruby-libxml
-      - smartmontools
-      - software-properties-common
-      - tree
-      - vim
-      - wget
-      - xpaint
-      - zlib1g-dev
 
 - name: Install pip packages
   ansible.builtin.pip:

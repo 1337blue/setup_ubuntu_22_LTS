@@ -47,3 +47,36 @@ repos:
         kubectl: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/ /"
       public_keys:
         - "https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/Release.key"
+apt:
+  packages:
+    - ansible-lint
+    - apt-transport-https
+    - build-essential
+    - curl
+    - direnv
+    - docker.io
+    - golang-go
+    - htop
+    - iotop
+    - jq
+    - keepassxc
+    - liblzma-dev
+    - libcurl4-openssl-dev
+    - linux-headers-generic
+    - lm-sensors
+    - net-tools
+    - openjdk-11-jdk
+    - openssh-server
+    - openvpn
+    - patch
+    - powertop
+    - python3-pip
+    - ruby-dev
+    - ruby-libxml
+    - smartmontools
+    - software-properties-common
+    - tree
+    - vim
+    - wget
+    - xpaint
+    - zlib1g-dev
