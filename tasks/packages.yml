@@ -103,7 +103,7 @@
   ansible.builtin.set_fact:
     minikube_changes: "{{ deb_packages.results | json_query(\n
       '[?item == `https://storage.googleapis.com/minikube/\n
-      releases/latest/minikube_latest_amd64.deb`].changed') }}"
+      releases/latest/minikube_{{ minikube_version }}_amd64.deb`].changed') }}"
 
 - name: Make docker the default minikube driver
   ansible.builtin.command: minikube config set driver docker
