@@ -49,9 +49,8 @@
     classic: true
   become: true
 
-# vagrant depends on virtualbox
 # TODO make sure to only install those if required -> avoid download of packages
-- name: Install gopass, minikube, vagrant and zoom
+- name: Install gopass, kubectl, minikube, vagrant and zoom
   ansible.builtin.apt:
     deb: "{{ item }}"
   become: true
