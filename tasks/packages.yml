@@ -45,13 +45,9 @@
 
 - name: Install Snap apps
   snap:
-    name: "{{ item }}"
+    name: "{{ snap.apps }}"
     classic: true
   become: true
-  with_items:
-    - notepad-plus-plus
-    - slack
-    - spotify
 
 # vagrant depends on virtualbox
 # TODO make sure to only install those if required -> avoid download of packages

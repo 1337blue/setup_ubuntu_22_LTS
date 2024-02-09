@@ -41,6 +41,11 @@ repos:
         vscode: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
       public_keys:
         - https://packages.microsoft.com/keys/microsoft.asc
+snap:
+  apps:
+    - notepad-plus-plus
+    - slack
+    - spotify
 apt:
   packages:
     - ansible-lint
