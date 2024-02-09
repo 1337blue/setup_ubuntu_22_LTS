@@ -1,7 +1,5 @@
 setup_open_ssh_server: false
 tmp_dir: /tmp/ansible
-username: "{{ lookup('env', 'USER') }}"
-home_dir: "{{ lookup('env', 'HOME') }}"
 gopass_version: 1.13.0
 kubectl_version: 1.29.1
 minikube_version: 1.31.2-0
