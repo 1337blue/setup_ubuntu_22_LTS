@@ -41,12 +41,6 @@ repos:
         vscode: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
       public_keys:
         - https://packages.microsoft.com/keys/microsoft.asc
-  - package:
-      name: kubectl
-      repository:
-        kubectl: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/ /"
-      public_keys:
-        - "https://pkgs.k8s.io/core:/stable:/v{{ kubectl_version }}/deb/Release.key"
 apt:
   packages:
     - ansible-lint
