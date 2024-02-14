@@ -1,40 +1,43 @@
-- name: Add config to bashrc
-  become: true
-  ansible.builtin.lineinfile:
-    path: /etc/bash.bashrc
-    state: present
-    line: "{{ item }}"
-  loop:
-    - eval "$(direnv hook bash)"
-    - export PATH="$HOME/.local/bin:$PATH"
-    - source <(kubectl completion bash)
-    - alias k=kubectl
+- name: config
+  tags: config
+  block:
+    - name: Add config to bashrc
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/bash.bashrc
+        state: present
+        line: "{{ item }}"
+      loop:
+        - eval "$(direnv hook bash)"
+        - export PATH="$HOME/.local/bin:$PATH"
+        - source <(kubectl completion bash)
+        - alias k=kubectl
 
-- name: Ensure group "docker" exists with correct gid
-  ansible.builtin.group:
-    name: docker
-    state: present
-    gid: 1750
-  become: true
+    - name: Ensure group "docker" exists with correct gid
+      ansible.builtin.group:
+        name: docker
+        state: present
+        gid: 1750
+      become: true
 
-- name: Append the user to required groups
-  ansible.builtin.user:
-    name: "{{ ansible_facts.user_id }}"
-    groups: "{{ item }}"
-    append: true
-  become: true
-  notify: Restart docker
-  with_items:
-    - docker
+    - name: Append the user to required groups
+      ansible.builtin.user:
+        name: "{{ ansible_facts.user_id }}"
+        groups: "{{ item }}"
+        append: true
+      become: true
+      notify: Restart docker
+      with_items:
+        - docker
 
-- name: Allow SSH password authentication
-  become: true
-  ansible.builtin.lineinfile:
-    state: present
-    regexp: '.*PasswordAuthentication.*'
-    line: 'PasswordAuthentication yes'
-    path: /etc/ssh/sshd_config
-    validate: sshd -t -f %s
-    mode: "0644"
-  notify: Enable and restart sshd
-  when: setup_open_ssh_server | bool
+    - name: Allow SSH password authentication
+      become: true
+      ansible.builtin.lineinfile:
+        state: present
+        regexp: '.*PasswordAuthentication.*'
+        line: 'PasswordAuthentication yes'
+        path: /etc/ssh/sshd_config
+        validate: sshd -t -f %s
+        mode: "0644"
+      notify: Enable and restart sshd
+      when: setup_open_ssh_server | bool

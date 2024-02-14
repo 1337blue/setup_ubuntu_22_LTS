@@ -13,18 +13,23 @@
   tasks:
     - name: Configure git
       ansible.builtin.include_tasks: tasks/git.yml
+      tags: git
 
     - name: Install packages
       ansible.builtin.include_tasks: tasks/packages.yml
+      tags: packages
 
     - name: Install terraform tools
       ansible.builtin.include_tasks: tasks/terraform.yml
+      tags: terraform
 
     - name: Configure vscode
       ansible.builtin.include_tasks: tasks/vscode.yml
+      tags: vscode
 
     - name: Config changes
       ansible.builtin.include_tasks: tasks/config.yml
+      tags: config
 
   post_tasks:
     - name: Cleanup tmp dir
