@@ -1,4 +1,4 @@
-- name: vscode
+- name: Vscode
   tags: vscode
   block:
     - name: Fetch VS Code extensions

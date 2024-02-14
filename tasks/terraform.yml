@@ -1,4 +1,4 @@
-- name: terraform
+- name: Terraform
   tags: terraform
   block:
     - name: Is tfenv installed?

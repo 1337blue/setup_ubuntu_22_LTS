@@ -1,4 +1,4 @@
-- name: packages
+- name: Packages
   tags: packages
   block:
     - name: Upgrade Packages

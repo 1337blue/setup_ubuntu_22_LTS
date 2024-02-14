@@ -1,4 +1,4 @@
-- name: git
+- name: Git
   tags: git
   block:
     - name: Add git email
