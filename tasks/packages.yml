@@ -57,7 +57,7 @@
 
 - name: Set facts for installing kubectl
   ansible.builtin.set_fact:
-    install_kubectl: "{{ is_kubectl_installed.stdout_lines | length == 0 or\
+    install_kubectl: "{{ is_kubectl_installed.stdout_lines | length == 0 or \
       not kubectl.version in is_kubectl_installed.stdout_lines[0]}}"
 
 - name: Install kubectl
