@@ -8,7 +8,7 @@
     - eval "$(direnv hook bash)"
     - export PATH="$HOME/.local/bin:$PATH"
     - source <(kubectl completion bash)
-    - export k=kubectl
+    - alias k=kubectl
 
 - name: Ensure group "docker" exists with correct gid
   ansible.builtin.group:
