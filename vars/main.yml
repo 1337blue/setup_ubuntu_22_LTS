@@ -1,7 +1,12 @@
 setup_open_ssh_server: false
 tmp_dir: /tmp/ansible
 gopass_version: 1.13.0
-kubectl_version: 1.29.1
+# Version number is stated here more than once to avoid recursive variable assignement
+kubectl:
+  checksum: 69ab3a931e826bf7ac14d38ba7ca637d66a6fcb1ca0e3333a2cafdf15482af9f
+  path: /usr/local/bin/kubectl
+  url: https://dl.k8s.io/release/v1.29.1/bin/linux/amd64/kubectl
+  version: 1.29.1
 minikube_version: 1.31.2-0
 vagrant_version: 2.2.10
 vscode_settings: "{{ ansible_facts.user_dir }}/.config/Code/User/settings.json"
@@ -39,12 +44,6 @@ repos:
         vscode: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
       public_keys:
         - https://packages.microsoft.com/keys/microsoft.asc
-  - package:
-      name: kubectl
-      repository:
-        kubectl: deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
-      public_keys:
-        - https://packages.cloud.google.com/apt/doc/apt-key.gpg
 snap:
   apps:
     - notepad-plus-plus
