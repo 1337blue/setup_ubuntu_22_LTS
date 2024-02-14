@@ -4,8 +4,7 @@
     scope: system
     value: "{{ git.email }}"
   become: true
-  when:
-    - '"@" in git.email'
+  when: "'@' in git.email"
 
 - name: Add git user name
   community.general.git_config:
@@ -13,8 +12,7 @@
     scope: system
     value: "{{ git.username }}"
   become: true
-  when:
-    - 'git.username | length > 1'
+  when: git.username | length > 1
 
 - name: Set vim as default editor for git
   community.general.git_config:
