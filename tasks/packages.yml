@@ -61,25 +61,14 @@
       not kubectl.version in is_kubectl_installed.stdout_lines[0]}}"
 
 - name: Install kubectl
-  ansible.builtin.file:
-    src: "{{ kubectl.url }}"
+  ansible.builtin.get_url:
+    url: "{{ kubectl.url }}"
     dest: "{{ kubectl.path }}"
     owner: root
     group: root
+    checksum: kubectl.checksum
   become: true
   when: install_kubectl
-
-- name: Get sha256 checksum of kubectl
-  ansible.builtin.stat:
-    path: "{{ kubectl.path }}"
-    checksum_algorithm: sha256
-    get_checksum: true
-  register: kubectl_sha256
-
-- name: Check kubectl integrity
-  ansible.builtin.fail:
-    msg: "kubectl integrity could not be verified!\nTry again or make sure to update checksum"
-  when: kubect_sha256.checksum != kubectl.checksum
 
 # TODO make sure to only install those if required -> avoid download of packages
 - name: Install gopass, minikube, vagrant and zoom
