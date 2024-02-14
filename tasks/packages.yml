@@ -57,7 +57,7 @@
 
 - name: Set facts for installing kubectl
   ansible.builtin.set_fact:
-    install_kubectl: "{{ is_kubectl_installed.stdout_lines | length == 0 or\n
+    install_kubectl: "{{ is_kubectl_installed.stdout_lines | length == 0 or\
       not kubectl.version in is_kubectl_installed.stdout_lines[0]}}"
 
 - name: Install kubectl
@@ -85,8 +85,8 @@
 
 - name: Set fact for minikube handler
   ansible.builtin.set_fact:
-    minikube_changes: "{{ deb_packages.results | json_query(\n
-      '[?item == `https://storage.googleapis.com/minikube/\n
+    minikube_changes: "{{ deb_packages.results | json_query(\
+      '[?item == `https://storage.googleapis.com/minikube/\
       releases/latest/minikube_{{ minikube_version }}_amd64.deb`].changed') }}"
 
 - name: Make docker the default minikube driver
