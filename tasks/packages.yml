@@ -52,7 +52,7 @@
 - name: Is kubectl installed?
   ansible.builtin.shell:
     cmd: "kubectl version --client || true"
-  register: is_kubectl_installed?
+  register: is_kubectl_installed
   changed_when: false
 
 - name: Set facts for installing kubectl
