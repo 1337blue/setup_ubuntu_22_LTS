@@ -3,10 +3,10 @@ tmp_dir: /tmp/ansible
 gopass_version: 1.13.0
 # Version number is stated here more than once to avoid recursive variable assignement
 kubectl:
-  checksum: 69ab3a931e826bf7ac14d38ba7ca637d66a6fcb1ca0e3333a2cafdf15482af9f
+  checksum: c8351fe0611119fd36634dd3f53eb94ec1a2d43ef9e78b92b4846df5cc7aa7e3
   path: /usr/local/bin/kubectl
-  url: https://dl.k8s.io/release/v1.29.1/bin/linux/amd64/kubectl
-  version: 1.29.1
+  url: https://dl.k8s.io/release/v1.28.6/bin/linux/amd64/kubectl
+  version: 1.28.6
 minikube_version: 1.31.2-0
 vagrant_version: 2.2.10
 vscode_settings: "{{ ansible_facts.user_dir }}/.config/Code/User/settings.json"
