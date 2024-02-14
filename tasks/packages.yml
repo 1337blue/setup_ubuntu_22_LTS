@@ -66,6 +66,7 @@
     dest: "{{ kubectl.path }}"
     owner: root
     group: root
+    mode: "0755"
     checksum: "sha256:{{ kubectl.checksum }}"
   become: true
   when: install_kubectl
