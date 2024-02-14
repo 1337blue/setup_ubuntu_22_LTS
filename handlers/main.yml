@@ -13,11 +13,6 @@
   become: true
 
 # This is to make sure that minikube can be started after playbook finishes without pulling images
-- name: Make docker the default minikube driver
-  ansible.builtin.command: minikube config set driver docker
-  when: minikube_changes | bool
-  changed_when: true
-
 - name: Start and stop minikube
   ansible.builtin.shell:
-    cmd: "minikube start"
+    cmd: "minikube start && minikube stop"
