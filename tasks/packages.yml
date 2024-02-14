@@ -44,7 +44,7 @@
     "{{ repos }}"
 
 - name: Install Snap apps
-  snap:
+  community.general.snap:
     name: "{{ snap.apps }}"
     classic: true
   become: true
