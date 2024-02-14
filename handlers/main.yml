@@ -16,3 +16,4 @@
 - name: Start and stop minikube
   ansible.builtin.shell:
     cmd: "minikube start && minikube stop"
+  changed_when: false
