@@ -9,16 +9,12 @@
 
 - name: Install Packages
   ansible.builtin.apt:
-    name: "{{ apt.packages }}"
+    name: "{{ packages.apt }}"
   become: true
 
 - name: Install pip packages
   ansible.builtin.pip:
-    name:
-      - awscli
-      - docker-compose
-      - pre-commit
-      - yq
+    name: "{{ packages.pip }}"
 
 - name: Import GPG keys
   ansible.builtin.apt_key:
@@ -45,7 +41,7 @@
 
 - name: Install Snap apps
   community.general.snap:
-    name: "{{ snap.apps }}"
+    name: "{{ packages.snap }}"
     classic: true
   become: true
 
