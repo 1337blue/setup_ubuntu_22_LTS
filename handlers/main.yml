@@ -11,10 +11,3 @@
     enabled: true
     state: restarted
   become: true
-
-# This is to make sure that minikube can be started after playbook finishes without pulling images
-- name: Start and stop minikube
-  become: true
-  ansible.builtin.shell:
-    cmd: "minikube start && minikube stop"
-  changed_when: false

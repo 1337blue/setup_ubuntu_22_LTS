@@ -90,7 +90,6 @@
     - name: Make docker the default minikube driver
       ansible.builtin.command: minikube config set driver docker
       when: minikube_changes | bool
-      notify: Start and stop minikube
       changed_when: true
 
     - name: Cleanup apt
