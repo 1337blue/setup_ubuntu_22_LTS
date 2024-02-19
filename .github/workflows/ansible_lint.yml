@@ -1,13 +1,12 @@
-
 name: ansible_lint
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   push:
-    branches: [ master ]
+    branches: [main]
   pull_request:
-    branches: [ master ]
+    branches: [main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -18,11 +17,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
-    # Runs a single command using the runners shell
-    - name: ansible-lint
-      uses: ansible/ansible-lint-action@master
-      with:
-        targets: "**.yml"
+      # Runs a single command using the runners shell
+      - name: ansible-lint
+        uses: ansible/ansible-lint@v6.21.1
+        with:
+          targets: "**.yml"

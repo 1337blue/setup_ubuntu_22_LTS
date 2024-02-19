@@ -1,0 +1,89 @@
+setup_open_ssh_server: false
+tmp_dir: /tmp/ansible
+gopass_version: 1.13.0
+# Version number is stated here more than once to avoid recursive variable assignement
+kubectl:
+  checksum: c8351fe0611119fd36634dd3f53eb94ec1a2d43ef9e78b92b4846df5cc7aa7e3
+  path: /usr/local/bin/kubectl
+  url: https://dl.k8s.io/release/v1.28.6/bin/linux/amd64/kubectl
+  version: 1.28.6
+minikube_version: 1.31.2-0
+vagrant_version: 2.2.10
+vscode_settings: "{{ ansible_facts.user_dir }}/.config/Code/User/settings.json"
+terraform:
+  github: https://github.com/terraform
+  tools:
+    terraform:
+      version: 1.7.2
+    tfenv:
+      version: 3.0.0
+      folder: "{{ ansible_facts.user_dir }}/.tfenv"
+    terraform_docs:
+      version: 0.17.0
+    tflint:
+      version: 0.50.3
+git:
+  email: x
+  username: x
+repos:
+  - package:
+      name: helm
+      repository:
+        helm: deb https://baltocdn.com/helm/stable/debian/ all main
+      public_keys:
+        - https://baltocdn.com/helm/signing.asc
+  - package:
+      name: opera-stable
+      repository:
+        opera-stable: deb [arch=i386,amd64] https://deb.opera.com/opera-stable/ stable non-free
+      public_keys:
+        - https://deb.opera.com/archive.key
+  - package:
+      name: code
+      repository:
+        vscode: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+      public_keys:
+        - https://packages.microsoft.com/keys/microsoft.asc
+packages:
+  pip:
+    - awscli
+    - docker-compose
+    - pre-commit
+    - yq
+  snap:
+    - notepad-plus-plus
+    - slack
+    - spotify
+  apt:
+    - ansible-lint
+    - apt-transport-https
+    - build-essential
+    - curl
+    - direnv
+    - docker-buildx
+    - docker.io
+    - golang-go
+    - htop
+    - iotop
+    - jq
+    - keepassxc
+    - liblzma-dev
+    - libcurl4-openssl-dev
+    - linux-headers-generic
+    - lm-sensors
+    - net-tools
+    - openjdk-11-jdk
+    - openssh-server
+    - openvpn
+    - patch
+    - powertop
+    - python3-pip
+    - ruby-dev
+    - ruby-libxml
+    - smartmontools
+    - software-properties-common
+    - tree
+    - vim
+    - wget
+    - xpaint
+    - zlib1g-dev

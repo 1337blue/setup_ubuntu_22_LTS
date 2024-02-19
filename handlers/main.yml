@@ -1,0 +1,13 @@
+- name: Enable and restart sshd
+  ansible.builtin.service:
+    name: sshd
+    enabled: true
+    state: restarted
+  become: true
+
+- name: Restart docker
+  ansible.builtin.service:
+    name: docker
+    enabled: true
+    state: restarted
+  become: true

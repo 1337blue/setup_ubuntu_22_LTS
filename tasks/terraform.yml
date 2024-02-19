@@ -1,0 +1,112 @@
+- name: Terraform
+  tags: terraform
+  block:
+    - name: Is tfenv installed?
+      ansible.builtin.shell:
+        cmd: "tfenv -v || true"
+      register: is_tfenv_installed
+      changed_when: false
+
+    - name: Is terraform installed?
+      ansible.builtin.shell:
+        cmd: "terraform -v || true"
+      register: is_terraform_installed
+      changed_when: false
+
+    - name: Is tflint installed?
+      ansible.builtin.shell:
+        cmd: "tflint -v || true"
+      register: is_tflint_installed
+      changed_when: false
+
+    - name: Is terraform-docs installed?
+      ansible.builtin.shell:
+        cmd: "terraform-docs -v || true"
+      register: is_terraform_docs_installed
+      changed_when: false
+
+    - name: Set facts for installing terraform tools
+      ansible.builtin.set_fact:
+        install_tfenv: "{{ is_tfenv_installed.stdout_lines | length == 0 or \
+          not terraform.tools.tfenv.version in is_tfenv_installed.stdout_lines[0] or \
+          is_terraform_installed.stdout_lines | length == 0 }}"
+        install_terraform: "{{ is_terraform_installed.stdout_lines | length == 0 or \
+          not terraform.tools.terraform.version in is_terraform_installed.stdout_lines[0] }}"
+        install_tflint: "{{ is_tflint_installed.stdout_lines | length == 0 or \
+          not terraform.tools.tflint.version in is_tflint_installed.stdout_lines[0] }}"
+        install_terraform_docs: "{{ is_terraform_docs_installed.stdout_lines | length == 0 or \
+          not terraform.tools.terraform_docs.version in is_terraform_docs_installed.stdout_lines[0] }}"
+
+    - name: Cleanup tfenv dir
+      ansible.builtin.file:
+        path: "{{ terraform.tools.tfenv.folder }}"
+        state: absent
+      when: install_tfenv
+
+    - name: Unzip tfenv
+      ansible.builtin.unarchive:
+        src: https://github.com/tfutils/tfenv/archive/refs/tags/v{{ terraform.tools.tfenv.version }}.zip
+        dest: "{{ tmp_dir }}"
+        mode: "1775"
+        owner: "{{ ansible_facts.user_id }}"
+        group: "{{ ansible_facts.user_id }}"
+        remote_src: true
+      become: true
+      when: install_tfenv
+
+    - name: Install tfenv
+      ansible.builtin.command: "mv {{ tmp_dir }}/tfenv-{{ terraform.tools.tfenv.version }} {{ terraform.tools.tfenv.folder }}"
+      when: install_tfenv
+      changed_when: true
+
+    - name: Find tfenv binaries
+      ansible.builtin.find:
+        paths: "{{ terraform.tools.tfenv.folder }}/bin"
+      register: tf_env_bins
+      when: install_tfenv
+
+    - name: Link tfenv binaries
+      ansible.builtin.file:
+        src: "{{ item.path }}"
+        dest: "/usr/local/bin/{{ item.path | basename }}"
+        state: link
+        owner: root
+        group: root
+      become: true
+      when: install_tfenv
+      with_items:
+        - "{{ tf_env_bins.files }}"
+
+    - name: Install terraform
+      ansible.builtin.command: tfenv install {{ terraform.tools.terraform.version }}
+      when: install_terraform
+      changed_when: true
+
+    - name: Setup terraform
+      ansible.builtin.command: tfenv use {{ terraform.tools.terraform.version }}
+      when: install_terraform
+      changed_when: true
+
+    - name: Unzip tflint
+      ansible.builtin.unarchive:
+        src: "{{ terraform.github }}-linters/tflint/releases/download/v{{ terraform.tools.tflint.version }}/tflint_linux_amd64.zip"
+        dest: /usr/bin
+        mode: "0755"
+        owner: root
+        group: root
+        remote_src: true
+      become: true
+      when: install_tflint
+
+    - name: Unzip terraform-docs
+      ansible.builtin.unarchive:
+        src: "{{ terraform.github }}-docs/terraform-docs/\
+          releases/download/v{{ terraform.tools.terraform_docs.version }}/\
+          terraform-docs-v{{ terraform.tools.terraform_docs.version }}-linux-amd64.tar.gz"
+        dest: /usr/bin
+        mode: "0755"
+        owner: root
+        group: root
+        remote_src: true
+      become: true
+      when: install_terraform_docs

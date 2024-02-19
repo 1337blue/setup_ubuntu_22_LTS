@@ -1,0 +1,48 @@
+- name: Vscode
+  tags: vscode
+  block:
+    - name: Fetch VS Code extensions
+      ansible.builtin.command: code --list-extensions
+      register: vs_code_extensions
+      changed_when: false
+
+    - name: Install VS Code extensions
+      ansible.builtin.command: code --install-extension "{{ item }}"
+      when: item not in vs_code_extensions.stdout
+      changed_when: true
+      with_items:
+        - davidanson.vscode-markdownlint
+        - dbaeumer.vscode-eslint
+        - eamodio.gitlens
+        - hashicorp.terraform
+        - hookyqr.beautify
+        - janjoerke.jenkins-pipeline-linter-connector
+        - jmmeessen.jenkins-declarative-support
+        - magicstack.magicpython
+        - mhutchie.git-graph
+        - ms-azuretools.vscode-docker
+        - ms-python.python
+        - redhat.vscode-yaml
+        - tht13.python
+        - vivaxy.vscode-conventional-commits
+        - vscodevim.vim
+
+    - name: Check if vscode settings.json exists
+      ansible.builtin.stat:
+        path: "{{ vscode_settings }}"
+      register: settings
+
+    - name: Copy vscode settings.json
+      ansible.builtin.copy:
+        src: ./conf/settings.json
+        dest: "{{ vscode_settings }}"
+        mode: "0644"
+      when: not settings.stat.exists
+
+    - name: Increase watch limit for VSCode
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/sysctl.conf
+        state: present
+        line: fs.inotify.max_user_watches=524288
+        mode: "0644"
